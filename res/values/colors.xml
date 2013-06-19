@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="actionbar_separator">#662a68a2</color>
+    <color name="actionbar_title">#ffffffff</color>
+    <color name="actionbar_background_start">#ff2a68a2</color>
+    <color name="actionbar_background_end">#ff3b91e2</color>
+    <color name="actionbar_background_item_pressed_start">#fffff796</color>
+    <color name="actionbar_background_item_pressed_end">#fff5dd6d</color>
+    <color name="bg">#fffffade</color>
+    <color name="light_gray">#fff7f7f7</color>
+    <color name="light_brown">#ffc6954e</color>
+    <color name="light_pur">#ffb63260</color>
+    <color name="list_item_grey_light">#fff7f7f7</color>
+    <color name="bg_item_color_yellow">#fffffade</color>
+    <color name="color_tab_pressed">#ffa035bf</color>
+    <color name="color_tab_unpressed">#ff581d79</color>
+    <color name="color_bg_pressed">#ffffbbff</color>
+    <color name="color_bg_unpressed">#ff581d79</color>
+</resources>

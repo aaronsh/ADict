@@ -1,0 +1,228 @@
+@charset "utf-8";
+
+@font-face {
+	font-family: 'Unicode';
+	src: url('../fonts/Unicode.ttf');
+}
+
+@font-face {
+	font-family: 'KPhonetic';
+	src: url('../fonts/KPhonetic.ttf');
+}
+
+body,font {
+	font-family: 'Unicode';
+}
+
+i,b {
+	font-family: sans-serif;
+}
+
+.bookNameBox {
+	BORDER-BOTTOM: 2px solid #ddd;
+	overflow: auto;
+	position: relative;
+}
+
+.bookNameButton {
+	float: right;
+	position: absolute;
+	bottom: 6px;
+	right: 6px;
+}
+
+.bookName {
+	padding: 6px;
+	BORDER: #92b0dd 1px solid;
+	BACKGROUND: #cfddf0;
+	COLOR: #0000FF;
+	width: auto;
+	float: left;
+}
+
+.dictContents {
+	margin-left: 18px;
+}
+
+.keyWord {
+	background: url('../img/minus.png') no-repeat left center;
+	color: rgb(67, 67, 67);
+	font-family: Arial, sans-serif;
+	font-size: 24px;
+	font-weight: bold;
+	line-height: 30px;
+	margin-right: 15px;
+	padding-left: 16px;
+	vertical-align: bottom;
+}
+
+.wordBox {
+	margin-left: 18px;
+	font-size: 18px;
+}
+
+.icibaCategoryTitle {
+	display:table-cell;
+	background: url('img/background.png') no-repeat 100% 100%;
+	padding: 2px;
+	font-weight: bold;
+}
+
+.icibaWordItem {
+	margin-left: 18px;
+}
+
+.icibaSpellingPhoneticBox{
+	margin-left:18px;
+}
+.icibaSpelling{
+	color: black;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.icibaPhonetic {
+	color: rgb(160, 160, 160);
+	display: inline;
+	font-family: 'Unicode';
+	font-size: 14px;
+	font-weight: normal;
+	line-height: 26px;
+}
+
+.wordProperty {
+	color: rgb(67, 67, 67);
+	display: table-cell;
+	font-size: 14px;
+	font-weight: bold;
+	line-height: 24px;
+	text-align: left;
+	padding-right: 6px;
+}
+
+.wordExplanation {
+	display: table-cell;
+}
+
+.wordExampleTitle{
+	display:block;
+	background: url('img/line_brown.png') repeat-x left bottom;
+	padding: 2px 2px 6px 2px;
+	font-weight: bold;
+	color:#A55E29;
+	overflow: auto;
+	position: relative;
+}
+.wordExampleBtn{
+	float:right;position: absolute;
+	bottom: 12px;
+	right: 6px;
+}
+
+.wordExampleBox {
+	list-style-image: url('img/dot_brown.png');
+	list-style-position: outside;
+	list-style-type: disc;
+	margin:0px 0px 0px 14px;
+	padding:0px;
+}
+
+.wordExampleItem {
+	display: list-item;
+	margin: 0px 0px 3px 0px;
+	text-align: left;
+}
+
+.wordExampleTextEn {
+	font-size: 14px;
+	height: 24px;
+	line-height: 24px;
+	text-align: left;
+	margin:2px;
+	font-weight: bold;
+	color:black;
+}
+
+.wordExampleTextZh {
+	font-size: 14px;
+	height: 24px;
+	line-height: 24px;
+	text-align: left;
+	margin:2px;
+	color:darkgray;
+}
+
+
+.icibaJiBenCiYi{
+    BACKGROUND: #cfddf0;
+    border-color: black;
+    border-radius: 10px;
+    padding:5px;
+    margin-bottom:5px;
+}
+
+.icibaChangYongCiZu{
+    BACKGROUND: #cfddf0;
+    border-color: black;
+    border-radius: 10px;
+    padding:5px;
+    margin-bottom:5px;
+}
+
+.icibaXiGuanYongYu{
+    BACKGROUND: #cfddf0;
+    border-color: black;
+    border-radius: 10px;
+    padding:5px;
+    margin-bottom:5px;
+}
+
+.icibaYuYuan{
+    BACKGROUND: #cfddf0;
+    border-color: black;
+    border-radius: 10px;
+    padding:5px;
+    margin-bottom:5px;
+}
+
+.icibaDanCiXiang{
+    padding-left:60px;
+}
+
+.icibaAHDYinBiao{
+    display:none;
+}
+
+.icibaGuoJiYinBiao{
+    display:inline;
+}
+
+.icibaMeiGuoYinBiao{
+    display:inline;
+}
+
+.icibaJieShiXiang{
+}
+
+.icibaGenSuiZhuShi{
+}
+
+.icibaLiJiu{
+}
+
+.icibaLiJiuJieShi{
+}
+
+.icibaDanCiYuanXing{
+    display:inline;
+}
+
+.icibaYinJieFenDuan{
+    display:inline;
+}
+
+.icibaDanCiCiXing{
+}
+
+.icibaYuJieShi{
+}

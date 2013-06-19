@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/bg_list_item"
+    android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/item_text"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:padding="2dp"
+            android:paddingRight="2dp"
+            android:paddingTop="4dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#ff0b70a4" />
+
+</LinearLayout>
