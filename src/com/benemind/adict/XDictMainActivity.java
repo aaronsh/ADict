@@ -1,4 +1,4 @@
-package com.benemind.voa.xdict;
+package com.benemind.adict;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -35,9 +35,9 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.benemind.adict.R;
 import com.benemind.voa.util.DialogUtils;
-import com.benemind.voa.xdict.core.DictConsts;
-import com.benemind.voa.xdict.core.DictEng;
-import com.benemind.voa.xdict.core.NotFoundDictException;
+import com.benemind.adict.core.DictConsts;
+import com.benemind.adict.core.DictEng;
+import com.benemind.adict.core.NotFoundDictException;
 
 public class XDictMainActivity extends SherlockActivity implements
 		OnItemClickListener, TextWatcher, OnClickListener {

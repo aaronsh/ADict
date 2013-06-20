@@ -1,4 +1,4 @@
-package com.benemind.voa.xdict.core;
+package com.benemind.adict.core;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,7 +15,7 @@ import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
 import com.benemind.voa.util.StringUtils;
-import com.benemind.voa.xdict.core.kingsoft.KingsoftDictHtmlBuilder;
+import com.benemind.adict.core.kingsoft.KingsoftDictHtmlBuilder;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

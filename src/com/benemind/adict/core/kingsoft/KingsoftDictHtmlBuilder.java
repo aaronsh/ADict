@@ -1,4 +1,4 @@
-package com.benemind.voa.xdict.core.kingsoft;
+package com.benemind.adict.core.kingsoft;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,7 +18,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import com.benemind.voa.util.StringUtils;
-import com.benemind.voa.xdict.core.kingsoft.IcibaConvertParam.ExcelColumnIndex;
+import com.benemind.adict.core.kingsoft.IcibaConvertParam.ExcelColumnIndex;
 
 import android.content.Context;
 import android.util.Log;

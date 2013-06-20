@@ -1,4 +1,4 @@
-package com.benemind.voa.xdict;
+package com.benemind.adict;
 
 import java.util.ArrayList;
 

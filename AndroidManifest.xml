@@ -19,22 +19,21 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.benemind.adict.MainActivity"
-            android:label="@string/app_name" >
-            
-        </activity>
-        <activity android:name="com.benemind.voa.xdict.XDictMainActivity"
-	android:hardwareAccelerated="true"
-            android:theme="@style/Theme.Sherlock.Light.DarkActionBar" android:configChanges="orientation|screenSize">
+            android:name="com.benemind.adict.XDictMainActivity"
+            android:configChanges="orientation|screenSize"
+            android:hardwareAccelerated="true"
+            android:theme="@style/Theme.Sherlock.Light.DarkActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.benemind.voa.xdict.DictMgrActivity"
-	android:hardwareAccelerated="true"
-            android:theme="@style/Theme.Sherlock.Light.DarkActionBar"></activity>
+        <activity
+            android:name="com.benemind.adict.DictMgrActivity"
+            android:hardwareAccelerated="true"
+            android:theme="@style/Theme.Sherlock.Light.DarkActionBar" >
+        </activity>
     </application>
 
 </manifest>

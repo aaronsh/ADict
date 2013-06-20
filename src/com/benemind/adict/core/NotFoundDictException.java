@@ -1,4 +1,4 @@
-package com.benemind.voa.xdict.core;
+package com.benemind.adict.core;
 
 public class NotFoundDictException extends Exception {
 

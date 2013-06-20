@@ -1,4 +1,4 @@
-package com.benemind.voa.xdict;
+package com.benemind.adict;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,10 +19,9 @@ import android.widget.ArrayAdapter;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.benemind.adict.R;
-import com.benemind.voa.xdict.XDictMainActivity.loadDictsTask;
-import com.benemind.voa.xdict.core.DictEng;
-import com.benemind.voa.xdict.core.Dictionary;
-import com.benemind.voa.xdict.core.NotFoundDictException;
+import com.benemind.adict.core.DictEng;
+import com.benemind.adict.core.Dictionary;
+import com.benemind.adict.core.NotFoundDictException;
 import com.mobeta.android.dslv.DragSortListView;
 import com.mobeta.android.dslv.DragSortListView.RemoveListener;
 

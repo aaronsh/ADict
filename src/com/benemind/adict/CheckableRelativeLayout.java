@@ -1,7 +1,7 @@
-package com.benemind.voa.xdict;
+package com.benemind.adict;
 
 import com.benemind.adict.R;
-import com.benemind.voa.xdict.core.Dictionary;
+import com.benemind.adict.core.Dictionary;
 
 import android.content.Context;
 import android.util.AttributeSet;

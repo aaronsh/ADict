@@ -1,4 +1,4 @@
-package com.benemind.voa.xdict.core.kingsoft;
+package com.benemind.adict.core.kingsoft;
 
 class IcibaConvertParam {
 	protected enum ExcelColumnIndex {		

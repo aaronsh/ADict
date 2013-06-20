@@ -1,4 +1,4 @@
-package com.benemind.voa.xdict.core;
+package com.benemind.adict.core;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,7 +16,7 @@ import org.json.JSONException;
 
 import com.benemind.adict.R;
 import com.benemind.voa.util.FileUtils;
-import com.benemind.voa.xdict.core.kingsoft.KingsoftDictHtmlBuilder;
+import com.benemind.adict.core.kingsoft.KingsoftDictHtmlBuilder;
 
 import android.app.Activity;
 import android.content.Context;
