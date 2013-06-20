@@ -1,4 +1,4 @@
-package com.benemind.voa.util;
+package com.benemind.util;
 
 public class StringUtils {
 	final private static char LF = 10;

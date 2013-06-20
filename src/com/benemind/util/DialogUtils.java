@@ -1,4 +1,4 @@
-package com.benemind.voa.util;
+package com.benemind.util;
 
 import com.benemind.adict.R;
 

@@ -15,7 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import com.benemind.adict.R;
-import com.benemind.voa.util.FileUtils;
+import com.benemind.util.FileUtils;
 import com.benemind.adict.core.kingsoft.KingsoftDictHtmlBuilder;
 
 import android.app.Activity;

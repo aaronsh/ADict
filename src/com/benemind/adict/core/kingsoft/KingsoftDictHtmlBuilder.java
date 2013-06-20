@@ -17,7 +17,7 @@ import jxl.Workbook;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
-import com.benemind.voa.util.StringUtils;
+import com.benemind.util.StringUtils;
 import com.benemind.adict.core.kingsoft.IcibaConvertParam.ExcelColumnIndex;
 
 import android.content.Context;

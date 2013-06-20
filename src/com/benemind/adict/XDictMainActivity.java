@@ -34,7 +34,7 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.benemind.adict.R;
-import com.benemind.voa.util.DialogUtils;
+import com.benemind.util.DialogUtils;
 import com.benemind.adict.core.DictConsts;
 import com.benemind.adict.core.DictEng;
 import com.benemind.adict.core.NotFoundDictException;

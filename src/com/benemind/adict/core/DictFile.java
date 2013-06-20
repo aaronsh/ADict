@@ -14,7 +14,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
-import com.benemind.voa.util.StringUtils;
+import com.benemind.util.StringUtils;
 import com.benemind.adict.core.kingsoft.KingsoftDictHtmlBuilder;
 
 import android.graphics.Bitmap;
