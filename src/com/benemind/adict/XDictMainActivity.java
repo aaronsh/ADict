@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.ConsoleMessage;
 import android.webkit.WebChromeClient;
@@ -29,6 +30,8 @@ import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AutoCompleteTextView;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
@@ -40,7 +43,7 @@ import com.benemind.adict.core.DictEng;
 import com.benemind.adict.core.NotFoundDictException;
 
 public class XDictMainActivity extends SherlockActivity implements
-		OnItemClickListener, TextWatcher, OnClickListener {
+		OnItemClickListener, TextWatcher, OnClickListener, OnEditorActionListener {
 	private static final String TAG = "MainActivity";
 	protected static final int MSG_LIST_WORDS = 0;
 	protected static final int MSG_REDIRECT_WORD = 1;
@@ -153,6 +156,7 @@ public class XDictMainActivity extends SherlockActivity implements
 		mSearchInput.setOnItemClickListener(this);
 		mAdapter = new DropDownAdapter(this);
 		mSearchInput.setAdapter(mAdapter);
+		mSearchInput.setOnEditorActionListener(this);
 
 		View v = findViewById(R.id.search_in_dict);
 		v.setOnClickListener(this);
@@ -381,7 +385,6 @@ public class XDictMainActivity extends SherlockActivity implements
 			if( mDictEng.getActiveDictCount() > 0 ){
 				Intent intent = getIntent();
 				String word = intent.getStringExtra("word");
-				word = "read";
 				if (word != null) {
 					intent.putExtra("word", (String)null);
 					setSearchInputText(word);
@@ -443,4 +446,17 @@ public class XDictMainActivity extends SherlockActivity implements
 		}
 	}
 
+	@Override
+	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {  
+        switch(actionId){  
+        case EditorInfo.IME_ACTION_UNSPECIFIED:
+        case EditorInfo.IME_ACTION_SEARCH:  
+        	mSearchInput.dismissDropDown();
+			onClick(v);
+			return true;
+		default:
+            break;  
+        }  
+        return false;  
+    }  
 }

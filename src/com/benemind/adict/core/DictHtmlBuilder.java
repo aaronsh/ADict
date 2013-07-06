@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.benemind.adict.core.DictHtmlBuilder.HtmlPlugIn.Field;
+
 import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
@@ -49,6 +51,8 @@ public class DictHtmlBuilder {
 		if( plugin != null ){
 			String js = plugin.get(HtmlPlugIn.Field.JavaScript);
 			if( js!=null && js.length()>0 ){
+				
+				
 				innerHtml.append(text);
 				js = js.replaceFirst("publishDict", funcName);
 				StringBuilder jsCode = new StringBuilder();
@@ -220,11 +224,14 @@ public class DictHtmlBuilder {
 		try {
 			Workbook workbook = null;
 			InputStream in = null;
+			File pluginsDir = null;
 			try {
 				File file = new File(Folder, "plugins.xls");    
             	in = new FileInputStream(file);
 				workbook = Workbook.getWorkbook(in);
 				workbook.getNumberOfSheets();
+				
+				pluginsDir = new File(file.getParentFile(), "plugins");
 			} catch (Exception e) {
 				e.printStackTrace();
 				throw new Exception("file not found!");
@@ -232,42 +239,109 @@ public class DictHtmlBuilder {
 			
 			Sheet sheet = workbook.getSheet(0);
 			int rowCount = sheet.getRows();
-			//get map
-			int[] map = new int[HtmlPlugIn.getFieldCount()];
-			for(int i=0; i<map.length; i++){
-				map[i] = -1;
-			}
-			HtmlPlugIn.Field fields[] = HtmlPlugIn.Field.values();
-			Cell[] cells = sheet.getRow(2);
-			for(Cell c:cells){
-				String text = c.getContents().trim();
-				for(HtmlPlugIn.Field field:fields ){
-					String name = field.name();
-					if( name.equalsIgnoreCase(text) ){
-						int index = HtmlPlugIn.getIndex(field); 
-						map[index] = c.getColumn();
-						break;
-					}
-				} 
-			}
-			for(int i=0; i<map.length; i++){
-				if( map[i] == -1 ){
-					throw new Exception("can NOT find col:"+HtmlPlugIn.getFiled(i).name() );
-				}
-			}
-			for (int row = 3; row < rowCount; row++) {
+			int TitleLine = fetchTitleLine(sheet, HtmlPlugIn.Field.BookName.name());
+			String[] Titles = fetchTitles(sheet, TitleLine);
+			for (int row = TitleLine+1; row < rowCount; row++) {
 				HtmlPlugIn plugin = new HtmlPlugIn();
-				for(HtmlPlugIn.Field field:fields){
-					int col = map[HtmlPlugIn.getIndex(field)];
-					Cell c = sheet.getCell(col, row);
-					plugin.set(field, c.getContents());
+				for(int col=0; col<Titles.length; col++){
+					if( Titles[col] == null ){
+						continue;
+					}
+					Cell cell = sheet.getCell(col, row);
+					String text = cell.getContents().trim();
+					try{
+						HtmlPlugIn.Field field = HtmlPlugIn.Field.valueOf(Titles[col]);
+						switch(field){
+						case JavaScript:
+							text = readFromSd(new File(pluginsDir, text));
+							plugin.set(field, text);
+							break;
+						case CssFile:
+							if( text.length() > 0 ){
+								plugin.set(field, "plugins"+File.separator + text);
+							}
+							else{
+								plugin.set(field, null);
+							}
+							break;
+						case BookName:
+							if( text.length() == 0 ){
+								col = Titles.length;
+								plugin = null;
+								break;
+							}
+							/*flow through */
+						default:
+							plugin.set(field, text);
+							break;
+						}
+						
+					}
+					catch(IllegalArgumentException ex){
+						ex.printStackTrace();
+						throw ex;
+					}
 				}
-				mHtmlPlugins.add(plugin);
+				if( plugin != null ){
+					mHtmlPlugins.add(plugin);
+				}
 			}
 			workbook.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	private static String readFromSd(File file) {
+		try{
+			FileInputStream fin = new FileInputStream(file);   
+
+			int length = fin.available();   
+
+			byte [] buffer = new byte[length];
+			fin.read(buffer);
+			String s = new String(buffer);
+			fin.close();
+			return s;
+		}
+
+		catch(Exception e){   
+			e.printStackTrace();   
+		}   
+		return null;
+	}
+
+	private static String[] fetchTitles(Sheet sheet, int titleLine) {
+		// TODO Auto-generated method stub
+		int cols = sheet.getColumns();
+		String[] titles = new String[cols];
+		for(int col=0; col<cols; col++){
+			Cell cell = sheet.getCell(col, titleLine);
+			String s = cell.getContents().trim();
+			if( s.length() == 0 ){
+				titles[col] = null;
+			}
+			else{
+				titles[col] = s;
+			}
+		}
+		return titles;
+	}
+
+	private static int fetchTitleLine(Sheet sheet, String bookname) {
+		// TODO Auto-generated method stub
+		int rows = sheet.getRows();
+		int cols = sheet.getColumns();
+		for(int row=0; row<rows; row++){
+			for(int col=0; col<cols; col++){
+				Cell cell = sheet.getCell(col, row);
+				String s = cell.getContents().trim();
+				if( s.equals(bookname) ){
+					return row;
+				}
+			}
+		}
+		return -1;
 	}
 
 	static class HtmlSection {
@@ -291,7 +365,7 @@ public class DictHtmlBuilder {
 
 	static class HtmlPlugIn{
 		enum Field{
-			BookName, WordCount, IndexFileSize, JavaScript, CssFile
+			BookName, WordCount, IndexFileSize, JavaScript, CssFile, Comment
 		}
 
 		private String[] Fields;
@@ -318,7 +392,7 @@ public class DictHtmlBuilder {
 		}
 		void set(Field name, String val){
 			int index = name.ordinal();
-			Fields[index] = val.trim();
+			Fields[index] = val==null ? null:val.trim();
 		}
 		
 		static int getIndex(Field name){

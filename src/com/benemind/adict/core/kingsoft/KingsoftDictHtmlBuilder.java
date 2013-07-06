@@ -144,14 +144,12 @@ public class KingsoftDictHtmlBuilder {
 			b.append("\n\t");
 			return b;
 		}
-		String s = param.get(IcibaConvertParam.ExcelColumnIndex.ParentDivBeginTag);
-		b.append(s);
-		s = param.get(IcibaConvertParam.ExcelColumnIndex.BeginDiv).trim();
+		String s = param.get(IcibaConvertParam.ExcelColumnIndex.BeginHtmlTag);
 		if( s.length() == 0 ){
 			b.append("<div");
-			s = param.get(IcibaConvertParam.ExcelColumnIndex.ClassName).trim();
+			s = param.get(IcibaConvertParam.ExcelColumnIndex.NodeName).trim();
 			if( s.length() > 0 ){
-				b.append(" class=\"");
+				b.append(" name=\"");
 				b.append(s);
 				b.append('"');
 			}
@@ -191,13 +189,10 @@ public class KingsoftDictHtmlBuilder {
 		b.append(s);
 		b.append('\n');
 
-		s = param.get(IcibaConvertParam.ExcelColumnIndex.EndDiv).trim();
+		s = param.get(IcibaConvertParam.ExcelColumnIndex.EndHtmlTag);
 		if( s.length() == 0 ){
 			b.append("</div>\n");
 		}
-
-		s = param.get(IcibaConvertParam.ExcelColumnIndex.ParentDivEndTag);
-		b.append(s);
 		return b;
 	}
 	
@@ -238,16 +233,38 @@ public class KingsoftDictHtmlBuilder {
             Sheet sheet = workbook.getSheet(0);  
             Cell cell = null;  
             int rowCount = sheet.getRows();
-            IcibaConvertParam.ExcelColumnIndex[] columns = IcibaConvertParam.ExcelColumnIndex.values();
-            for(int row=2; row<rowCount; row++){ //skip first two rows
+			//load map
+			IcibaConvertParam.ExcelColumnIndex[] columns = IcibaConvertParam.ExcelColumnIndex.values();
+			int[] map = new int[columns.length];
+			for(int index=0; index<columns.length; index++){
+				map[index] = -1;
+			}
+			Cell[] cells = sheet.getRow(2);
+			for(int col=0; col<cells.length; col++){
+				Cell c = cells[col];
+				String s = c.getContents().trim();
+				for(int j=0; j<columns.length; j++ ){
+					IcibaConvertParam.ExcelColumnIndex excelCol = columns[j];
+					if( s.equalsIgnoreCase(excelCol.name()) ){
+						map[j] = col;
+						break;
+					}
+				}
+			}
+			
+			//read excel file
+            for(int row=3; row<rowCount; row++){ //skip first two rows
             	IcibaConvertParam paramItem = new IcibaConvertParam();
-            	for(IcibaConvertParam.ExcelColumnIndex col:columns){
-            		cell = sheet.getCell(paramItem.getIndex(col), row);
-            		String s = cell.getContents();
-            		if( col == IcibaConvertParam.ExcelColumnIndex.Tag ){
-            			s = s.trim();
+            	for(int col=0; col<map.length; col++){
+            		if( map[col] == -1 ){
+            			continue;
             		}
-            		paramItem.set(col, s);
+            		cell = sheet.getCell(map[col], row);
+            		String s = "";
+            		if( cell != null ){
+            			s = cell.getContents().trim();
+            		}
+            		paramItem.set(columns[col], s);
             	}
             	list.add(paramItem);
             }

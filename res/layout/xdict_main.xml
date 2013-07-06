@@ -15,6 +15,7 @@
             android:layout_weight="1"
             android:completionThreshold="1"
             android:ems="10"
+            android:imeOptions="actionSearch"
             android:singleLine="true"
             android:text="" >
 

@@ -282,7 +282,7 @@ public class Dictionary {
 				Iterator<MapNode> it = list.iterator();
 				while(it.hasNext()){
 					MapNode node = it.next();
-					wordText = DictHtmlBuilder.buildWordText(key);
+					wordText = DictHtmlBuilder.buildWordText(node.getWord());
 					
 					long ts = System.currentTimeMillis();
 					String text = mFileDict.fetchExplanation(node);
