@@ -41,6 +41,21 @@ public class CheckableRelativeLayout extends RelativeLayout implements Checkable
     	TextView v = (TextView)findViewById(R.id.dict_name);
 //    	Log.v(TAG, "setChecked "+checked + " "+v.getText());
         child.setChecked(checked);
+        
+        ImageView img = (ImageView)findViewById(R.id.dict_icon);
+		int imgRes = (Integer)img.getTag();
+        if( checked ){
+        	if( imgRes != R.drawable.book_open ){
+        		img.setImageResource(R.drawable.book_open);
+        		img.setTag(R.drawable.book_open);
+        	}
+        }
+        else{
+        	if( imgRes == R.drawable.book_open ){
+        		img.setImageResource(R.drawable.book_ok);
+        		img.setTag(R.drawable.book_ok);
+        	}
+        }
 /*    	
     	int state = mDict.getState(); 
     	if( state == Dictionary.DICT_STATE_SKIPPED ){
@@ -87,19 +102,22 @@ public class CheckableRelativeLayout extends RelativeLayout implements Checkable
 		int imgRes;
 		switch(dict.getState()){
 		case Dictionary.DICT_STATE_INSTALLED:
-			imgRes = R.drawable.i_audio;
+			imgRes = R.drawable.book_open;
 			break;
 		case Dictionary.DICT_STATE_SKIPPED:
-			imgRes = R.drawable.i_down;
+			imgRes = R.drawable.book_ok;
 			break;
 		case Dictionary.DICT_STATE_DESTROYED:
-			imgRes = R.drawable.i_star;
+			imgRes = R.drawable.book_err;
 			break;
 		default:
-			imgRes = R.drawable.ic_refresh;
+			imgRes = R.drawable.book_err;
 			break;
 		}
+		
+		Log.v(TAG, "dict:"+dict.getBookName() + "  state:"+dict.getState()+ " img:"+imgRes);
 		img.setImageResource(imgRes);
+		img.setTag(imgRes);
 	}
     
 }

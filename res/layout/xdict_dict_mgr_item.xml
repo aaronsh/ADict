@@ -9,7 +9,8 @@
             android:layout_height="36dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:background="@drawable/i_down" />
+            android:src="@drawable/book_err" />
+
         <CheckedTextView
             android:id="@+id/dict_actived"
             android:layout_width="wrap_content"
