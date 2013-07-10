@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -43,19 +44,21 @@ import com.benemind.adict.core.DictEng;
 import com.benemind.adict.core.NotFoundDictException;
 
 public class XDictMainActivity extends SherlockActivity implements
-		OnItemClickListener, TextWatcher, OnClickListener, OnEditorActionListener {
+		OnItemClickListener, TextWatcher, OnClickListener,
+		OnEditorActionListener {
 	private static final String TAG = "MainActivity";
 	protected static final int MSG_LIST_WORDS = 0;
 	protected static final int MSG_REDIRECT_WORD = 1;
-	
+
 	private static final int MENU_ID_DICT_MGR = 0;
 
 	private static final int ACTION_LIST_WORDS = 0;
 	private static final int ACTION_SEARCH_WORD = 1;
-	enum DictAction{  
-    LIST_WORDS,SEARCH_WORD
+
+	enum DictAction {
+		LIST_WORDS, SEARCH_WORD
 	}
-	
+
 	AutoCompleteTextView mSearchInput;
 	WebView mSearchResult;
 	// ArrayAdapter<String> mAdapter;
@@ -82,15 +85,14 @@ public class XDictMainActivity extends SherlockActivity implements
 			}
 		}
 	};
-	
-	
-	
-	private class DictWebViewClient extends WebViewClient{
+
+	private class DictWebViewClient extends WebViewClient {
 		private final static String BWORD_URL = "bword://";
+
 		@Override
 		public boolean shouldOverrideUrlLoading(WebView view, String url) {
-			Log.v(TAG, "url:"+url);
-			if( url.startsWith(BWORD_URL) ){
+			Log.v(TAG, "url:" + url);
+			if (url.startsWith(BWORD_URL)) {
 				String word = url.substring(BWORD_URL.length());
 				Message msg = mHandler.obtainMessage(MSG_REDIRECT_WORD, word);
 				mHandler.sendMessage(msg);
@@ -98,24 +100,31 @@ public class XDictMainActivity extends SherlockActivity implements
 			}
 			return false;
 		}
+
 		@Override
-		public void  onLoadResource(WebView view, String url){
-			Log.v(TAG, "onLoadResource "+url);
+		public void onLoadResource(WebView view, String url) {
+			Log.v(TAG, "onLoadResource " + url);
 			super.onLoadResource(view, url);
 		}
-		
-		@Override
-		public void  onReceivedError(WebView view, int errorCode, String description, String failingUrl){
-			Log.v(TAG, "onReceivedError "+errorCode + " "+description+" url:"+failingUrl);
-		}
-		 
 
-	}
-	
-	private class ChromeClient extends WebChromeClient{
 		@Override
-		public boolean  onConsoleMessage(ConsoleMessage msg){
-			Log.d(TAG, msg.lineNumber() + " "+msg.message());
+		public void onReceivedError(WebView view, int errorCode,
+				String description, String failingUrl) {
+			Log.v(TAG, "onReceivedError " + errorCode + " " + description
+					+ " url:" + failingUrl);
+		}
+
+		@Override
+		public void onPageFinished(WebView view, String url) {
+			Log.e(TAG, "onPageFinished");
+			mSearchInput.dismissDropDown();
+		}
+	}
+
+	private class ChromeClient extends WebChromeClient {
+		@Override
+		public boolean onConsoleMessage(ConsoleMessage msg) {
+			Log.d(TAG, msg.lineNumber() + " " + msg.message());
 			return super.onConsoleMessage(msg);
 		}
 	}
@@ -138,7 +147,7 @@ public class XDictMainActivity extends SherlockActivity implements
 		switch (item.getItemId()) {
 		case MENU_ID_DICT_MGR:
 			Intent intent = new Intent(this, DictMgrActivity.class);
-			this.startActivity(intent);
+			this.startActivityForResult(intent, 0);
 			break;
 		}
 		return true;
@@ -175,12 +184,14 @@ public class XDictMainActivity extends SherlockActivity implements
 
 		mWaitingDlg = null;
 		mDictAction = DictAction.LIST_WORDS;
-	}
 
-	@Override
-	protected void onResume() {
 		mDictEng = DictEng.getInstance(this);
 		mDictEng.reloadConfig();
+		loadDicts();
+	}
+
+	private void loadDicts() {
+		// TODO Auto-generated method stub
 		int DictCount = mDictEng.estimateDictionaryCount();
 		if (DictCount < 10) {
 			try {
@@ -190,7 +201,7 @@ public class XDictMainActivity extends SherlockActivity implements
 				String word = intent.getStringExtra("word");
 
 				if (word != null) {
-					intent.putExtra("word", (String)null);
+					intent.putExtra("word", (String) null);
 					setSearchInputText(word);
 				}
 			} catch (NotFoundDictException e) {
@@ -219,6 +230,10 @@ public class XDictMainActivity extends SherlockActivity implements
 			mWaitingDlg = dlg;
 		}
 
+	}
+
+	@Override
+	protected void onResume() {
 		super.onResume();
 	}
 
@@ -248,7 +263,10 @@ public class XDictMainActivity extends SherlockActivity implements
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		// TODO Auto-generated method stub
 		Log.v(TAG, "onItemClick " + mAdapter.getItem(arg2));
-		if (mHandler.hasMessages(MSG_LIST_WORDS)) { //cancel listWord task because afterTextChanged was called before the calling of onItemClick
+		if (mHandler.hasMessages(MSG_LIST_WORDS)) { // cancel listWord task
+													// because afterTextChanged
+													// was called before the
+													// calling of onItemClick
 			mHandler.removeMessages(MSG_LIST_WORDS);
 		}
 		Object obj = mAdapter.getItem(arg2);
@@ -269,14 +287,13 @@ public class XDictMainActivity extends SherlockActivity implements
 
 			// load history
 		} else {
-			if( mDictAction == DictAction.SEARCH_WORD ){
+			if (mDictAction == DictAction.SEARCH_WORD) {
 				Log.v(TAG, "mDictAction is DictAction.SEARCH_WORD");
 				SearchWordTask task = new SearchWordTask();
 				task.execute(text);
 				mDictAction = DictAction.LIST_WORDS;
-			}
-			else{
-				Log.v(TAG, "mDictAction is DictAction.LIST_WORDS");				
+			} else {
+				Log.v(TAG, "mDictAction is DictAction.LIST_WORDS");
 				Message msg = mHandler.obtainMessage(MSG_LIST_WORDS, text);
 				mHandler.sendMessageDelayed(msg, 100);
 			}
@@ -308,8 +325,7 @@ public class XDictMainActivity extends SherlockActivity implements
 		Log.v(TAG, "listWord end");
 	}
 
-	private void setSearchInputText(String text)
-	{
+	private void setSearchInputText(String text) {
 		mDictAction = DictAction.SEARCH_WORD;
 		mSearchInput.setText(text);
 		mSearchInput.setSelection(text.length());
@@ -382,15 +398,14 @@ public class XDictMainActivity extends SherlockActivity implements
 			}
 			mWaitingDlg = null;
 
-			if( mDictEng.getActiveDictCount() > 0 ){
+			if (mDictEng.getActiveDictCount() > 0) {
 				Intent intent = getIntent();
 				String word = intent.getStringExtra("word");
 				if (word != null) {
-					intent.putExtra("word", (String)null);
+					intent.putExtra("word", (String) null);
 					setSearchInputText(word);
 				}
-			}
-			else{
+			} else {
 				mSearchResult.loadUrl("file:///android_asset/dict_no_dict_"
 						+ getLanguageEnv() + ".html");
 
@@ -418,12 +433,12 @@ public class XDictMainActivity extends SherlockActivity implements
 		b.append("file://");
 		b.append(html.getPath());
 		b.append(File.separator);
-//		b.append(html.getName());
-		Log.v(TAG, "baseUrl:"+b);
-		mSearchResult.loadDataWithBaseURL(b.toString(), htmlContent, "text/html",
-				"utf-8", null);
+		// b.append(html.getName());
+		Log.v(TAG, "baseUrl:" + b);
+		mSearchResult.loadDataWithBaseURL(b.toString(), htmlContent,
+				"text/html", "utf-8", null);
 		mSearchResult.scrollTo(0, 0);
-		
+
 		InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 		inputMethodManager.hideSoftInputFromWindow(
 				mSearchInput.getWindowToken(),
@@ -447,16 +462,28 @@ public class XDictMainActivity extends SherlockActivity implements
 	}
 
 	@Override
-	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {  
-        switch(actionId){  
-        case EditorInfo.IME_ACTION_UNSPECIFIED:
-        case EditorInfo.IME_ACTION_SEARCH:  
-        	mSearchInput.dismissDropDown();
+	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+		switch (actionId) {
+		case EditorInfo.IME_ACTION_UNSPECIFIED:
+		case EditorInfo.IME_ACTION_SEARCH:
+			// mSearchInput.dismissDropDown();
 			onClick(v);
 			return true;
 		default:
-            break;  
-        }  
-        return false;  
-    }  
+			break;
+		}
+		return false;
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Log.d(TAG, "onActivityResult " + requestCode + " " + resultCode);
+		Intent intent = getIntent();
+		String word = mSearchInput.getText().toString();
+		Log.d(TAG, word);
+		if (word.length() > 0) {
+			intent.putExtra("word", word);
+		}
+		loadDicts();
+	}
 }

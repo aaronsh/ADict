@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 
+import android.app.Activity;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -62,12 +63,7 @@ public class DictMgrActivity extends SherlockListActivity  {
         list.setDropListener(onDrop);
         
         mWaitingDlg = null;
-	}
-	
-	@Override
-	protected void onResume() {
-		super.onResume();
-		
+
 		mDictEng = DictEng.getInstance(this);
 		int DictCount = mDictEng.estimateDictionaryCount();
 		if( DictCount < 10 ){
@@ -88,6 +84,13 @@ public class DictMgrActivity extends SherlockListActivity  {
 			dlg.show();
 			mWaitingDlg = dlg;
 		}
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+
 	}
 	
 	private void initList(ArrayList<Dictionary> dicts) {
@@ -131,6 +134,7 @@ public class DictMgrActivity extends SherlockListActivity  {
         	mDictEng.saveDictList(dicts);
         }
         
+        this.setResult(Activity.RESULT_OK, null);
         super.onDestroy();
 	}
     @Override
