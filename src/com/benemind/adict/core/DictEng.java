@@ -66,21 +66,38 @@ public class DictEng {
 			if(!imgFolder.exists()){
 				imgFolder.mkdirs();
 			}
-			String[] files = {"html.xls","iciba.xls", "plugins.xls",
-					"img/background.png",
-					"img/close.png",
-					"img/dot_brown.png",
-					"img/down_brown.png",
-					"img/expand.png",
-					"img/line_blue.png",
-					"img/line_brown.png",
-					"img/minus.png",
-					"img/plus.png",
-					"img/up_brown.png",
-					"dict.js",
-					"css/default.css",
-					"fonts/KPhonetic.ttf",
-					"fonts/Unicode.ttf"};
+			File pluginsFolder = new File(mHtmlFolder, "plugins");
+			if(!pluginsFolder.exists()){
+				pluginsFolder.mkdirs();
+			}
+			String[] files = {"html.xls","iciba.xls", "plugins.xls","dict.js",
+							"img/background.png",
+							"img/close.png",
+							"img/dot_brown.png",
+							"img/down_brown.png",
+							"img/examples1.png",
+							"img/examples2.png",
+							"img/expand.png",
+							"img/line_blue.png",
+							"img/line_brown.png",
+							"img/minus.png",
+							"img/plus.png",
+							"img/up_brown.png",
+
+							"css/default.css",
+							"plugins/langdao-ec-gb.js",
+							"plugins/qq_online.js",
+							"plugins/stardict-kdic-ec-11w-2.4.2.js",
+							"plugins/stardict-langdao-ec-gb-2.4.2.js",
+							"plugins/stardict-lazyworm-ec-2.4.2.js",
+							"plugins/stardict-oxfordjm-ec-2.4.2.js",
+							"plugins/stardict-powerword2007_pwdecmc-2.4.2.css",
+							"plugins/stardict-powerword2007_pwdecmc-2.4.2.js",
+							"plugins/stardict-quick_eng-zh_CN-2.4.2.js",
+							"plugins/stardict-stardict1.3-2.4.2.js",
+							"plugins/stardict-xdict-ec-gb-2.4.2.js",
+							"plugins/youdao_online.js"			
+					};
 			for(String file:files){
 				installFile(file);
 			}
@@ -128,6 +145,8 @@ public class DictEng {
 	public void loadDicts() throws NotFoundDictException {
 		mActiveDicts.clear();
 		ArrayList<Dictionary> onCardList = scanCard();
+		onCardList.add(new OnlineDictionary("有道在线词典"));
+		onCardList.add(new OnlineDictionary("QQ在线词典"));
 		if (onCardList.isEmpty()) {
 			throw new NotFoundDictException();
 		}
@@ -209,6 +228,10 @@ public class DictEng {
 		ArrayList<Dictionary> list = new ArrayList<Dictionary>();
 
 		ArrayList<Dictionary> onCardList = scanCard();
+		//add online dicts
+		onCardList.add(new OnlineDictionary("有道在线词典"));
+		onCardList.add(new OnlineDictionary("QQ在线词典"));
+		
 		ArrayList<Dictionary> savedList = loadDictList();
 		Iterator<Dictionary> itSaved = savedList.iterator();
 		while (itSaved.hasNext()) {
@@ -298,6 +321,9 @@ public class DictEng {
 
 		File[] files = mBookFolder.listFiles();
 
+		if( files == null ){
+			return 0;
+		}
 		for (File folder : files) {
 			if (folder.isDirectory()) {
 				String name =getDictName(folder);
@@ -340,7 +366,9 @@ public class DictEng {
 		ArrayList<Dictionary> dicts = new ArrayList<Dictionary>();
 
 		File[] files = mBookFolder.listFiles();
-
+		if( files == null ){
+			return dicts;
+		}
 		for (File folder : files) {
 			if (folder.isDirectory()) {
 				Dictionary dict = Dictionary.getFromDictPath(folder);
@@ -428,5 +456,9 @@ public class DictEng {
 	public int getActiveDictCount() {
 		// TODO Auto-generated method stub
 		return mActiveDicts.size();
+	}
+	
+	protected Context getContext(){
+		return mCntx;
 	}
 }

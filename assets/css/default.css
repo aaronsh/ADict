@@ -1,27 +1,32 @@
 @charset "utf-8";
 
-@font-face {
-	font-family: 'Unicode';
-	src: url('../fonts/Unicode.ttf');
-}
-
-@font-face {
-	font-family: 'KPhonetic';
-	src: url('../fonts/KPhonetic.ttf');
-}
 
 body,font {
 	font-family: 'Unicode';
+	background:#FCFCFD;
+	margin:0px;
+}
+
+img{
+    padding:0px;
+    margin:0px;
 }
 
 i,b {
 	font-family: sans-serif;
+}
+a{
+    text-decoration:none;
+    color:black;
 }
 
 .bookNameBox {
 	BORDER-BOTTOM: 2px solid #ddd;
 	overflow: auto;
 	position: relative;
+	padding-bottom:2px;
+	padding-top:3px;
+	padding-left:8px;
 }
 
 .bookNameButton {
@@ -31,17 +36,25 @@ i,b {
 	right: 6px;
 }
 
-.bookName {
-	padding: 6px;
-	BORDER: #92b0dd 1px solid;
-	BACKGROUND: #cfddf0;
-	COLOR: #0000FF;
-	width: auto;
-	float: left;
+.bookName{
+    display:table-cell;
+    #float:left;
+    padding: 5px 3px 3px 5px;
+    border: 1px solid #1e84db;
+    background: #2d90e4;
+    color: #fff;
+    border-radius: 3px;
+    box-shadow: 0 0 3px #bfc2c6;
+    font-weight: bold;
+    #line-height:30px; 
+    #height: 30px; 
 }
 
 .dictContents {
-	margin-left: 18px;
+	background-color:rgb(245,246,248); 
+	margin:2px;
+	padding:2px;
+	border-radius: 6px;
 }
 
 .keyWord {
@@ -59,6 +72,16 @@ i,b {
 .wordBox {
 	margin-left: 18px;
 	font-size: 18px;
+	background:rgb(229,229,229);
+	border: 1px solid rgb(198,198,198);
+	border-radius: 4px;
+}
+
+.title_level_3{
+    color:rgb(50, 119, 197);
+    font-weight:bold;
+    padding:3px 0px 3px 3px;
+    border-top: 2px solid #ddd;
 }
 
 .icibaCategoryTitle {
@@ -186,7 +209,11 @@ i,b {
 }
 
 .icibaDanCiXiang{
-    padding-left:60px;
+    BACKGROUND: lightgray;
+    border-color: black;
+    border-radius: 10px;
+    padding:5px;
+    margin-bottom:5px;
 }
 
 .icibaAHDYinBiao{
@@ -201,13 +228,19 @@ i,b {
     display:inline;
 }
 
+.icibaCiDianYinBiao{
+    font-family:'myfont';
+}
+
 .icibaJieShiXiang{
+	margin-left:20px;
 }
 
 .icibaGenSuiZhuShi{
 }
 
 .icibaLiJiu{
+	margin-left:20px;
 }
 
 .icibaLiJiuJieShi{
@@ -225,4 +258,16 @@ i,b {
 }
 
 .icibaYuJieShi{
+}
+
+.icibaLiJiuZu{
+    BACKGROUND: darkgray;
+    border-color: black;
+    border-radius: 10px;
+    padding:5px;
+    margin-bottom:5px;	
+}
+
+.icibaLiJuBiaoTi{
+	
 }

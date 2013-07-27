@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class FileUtils {
-	private static final String APP_PATH= "voa";
+	private static final String APP_PATH= "adict";
 	private static File mAppDir = null;
 	private static File mDictDir = null;
 	
@@ -81,6 +81,7 @@ public class FileUtils {
 			return mDictDir;
 		}
 		
+/*		
 		File appDir = getAppDir();
 		if( appDir == null ){
 			return null;
@@ -93,9 +94,9 @@ public class FileUtils {
 			dictDir.delete();
 			dictDir.mkdirs();
 		}
-
-		mDictDir = dictDir;
-		return dictDir;
+*/
+		mDictDir = getAppDir();
+		return mDictDir;
 	}
 
 	public static File getDictFile(String name)

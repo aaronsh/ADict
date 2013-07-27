@@ -31,11 +31,11 @@ public class Dictionary {
 	private IfoFile mFileInfo;
 	private IdxFile mFileIndex;
 	private DictFile mFileDict;
-	private boolean mLoaded;
+	protected boolean mLoaded;
 	
 	private long mDictManagementID;
 	
-	private int DictState = DICT_STATE_UNINSTALLED;
+	protected int DictState = DICT_STATE_UNINSTALLED;
 
 	// private boolean GalaxDictSupport = false;
 
@@ -114,6 +114,10 @@ public class Dictionary {
 	
 	public static Dictionary fromJsonObj(JSONObject jsonObj)
 	{
+		if( OnlineDictionary.isOnlineDictionary(jsonObj) ){
+			return OnlineDictionary.fromJsonObj(jsonObj);
+		}
+		
 		try {
 			Dictionary dict = new Dictionary();
 			dict.DictPath = jsonObj.getString("DictPath");
