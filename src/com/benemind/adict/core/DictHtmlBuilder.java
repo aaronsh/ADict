@@ -1,8 +1,11 @@
 package com.benemind.adict.core;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -13,6 +16,7 @@ import jxl.Sheet;
 import jxl.Workbook;
 
 import android.content.Context;
+import au.com.bytecode.opencsv.CSVReader;
 
 public class DictHtmlBuilder {
 
@@ -140,36 +144,39 @@ public class DictHtmlBuilder {
 			mHtmlSections[i] = null;
 		}
 		try {
-			Workbook workbook = null;
-			InputStream in = null;
-			try {
-				File file = new File(Folder, "html.xls");    
-            	in = new FileInputStream(file);
-				workbook = Workbook.getWorkbook(in);
-				workbook.getNumberOfSheets();
-			} catch (Exception e) {
-				e.printStackTrace();
-				throw new Exception("file not found!");
-			}
-			Sheet sheet = workbook.getSheet(0);
-			Cell cell = null;
-			int rowCount = sheet.getRows();
-			for (int row = 0; row < rowCount; row++) { // skip first two rows
-				cell = sheet.getCell(0, row); // read the first cell of the row
-				HtmlSectionType type = getHtmlSectionType(cell.getContents());
-				if (type != null) {
-					try {
-						cell = sheet.getCell(1, row);
-						String s = cell.getContents();
-						HtmlSection section = new HtmlSection(s);
-						int index = getHtmlSectionTypeIndex(type);
-						mHtmlSections[index] = section;
-					} catch (Exception e) {
-						e.printStackTrace();
+			File file = new File(Folder, "html.csv");
+			CSVReader reader = new CSVReader(new FileReader(file));
+			String [] nextLine;
+			String name, code;
+			boolean foundTitle = false;
+			while ((nextLine = reader.readNext()) != null) {
+				name = null;
+				code = null;
+				if( nextLine.length >= 2 ){
+					name = nextLine[0].trim();
+					code = nextLine[1].trim();
+				}
+				if( foundTitle ){
+					if( name != null && name.length() > 0 && code != null  ){
+						HtmlSectionType type = getHtmlSectionType(name);
+						if (type != null) {
+							try {
+								HtmlSection section = new HtmlSection(code);
+								int index = getHtmlSectionTypeIndex(type);
+								mHtmlSections[index] = section;
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+					}
+				}
+				else{
+					if( name != null && name.equals("Name") && code != null && code.equals("Code") ){
+						foundTitle = true;
 					}
 				}
 			}
-			workbook.close();
+			reader.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -222,14 +229,15 @@ public class DictHtmlBuilder {
 		}
 
 		try {
-			Workbook workbook = null;
-			InputStream in = null;
+			CSVReader reader;
 			File pluginsDir = null;
 			try {
-				File file = new File(Folder, "plugins.xls");    
-            	in = new FileInputStream(file);
-				workbook = Workbook.getWorkbook(in);
-				workbook.getNumberOfSheets();
+				File file = new File(Folder, "plugins.csv");
+				
+				FileInputStream fr = new FileInputStream(file);
+				InputStreamReader inReader = new InputStreamReader(fr, "GB2312");
+				BufferedReader br = new BufferedReader(inReader);
+				reader = new CSVReader(br);
 				
 				pluginsDir = new File(file.getParentFile(), "plugins");
 			} catch (Exception e) {
@@ -237,56 +245,75 @@ public class DictHtmlBuilder {
 				throw new Exception("file not found!");
 			}
 			
-			Sheet sheet = workbook.getSheet(0);
-			int rowCount = sheet.getRows();
-			int TitleLine = fetchTitleLine(sheet, HtmlPlugIn.Field.BookName.name());
-			String[] Titles = fetchTitles(sheet, TitleLine);
-			for (int row = TitleLine+1; row < rowCount; row++) {
-				HtmlPlugIn plugin = new HtmlPlugIn();
-				for(int col=0; col<Titles.length; col++){
-					if( Titles[col] == null ){
-						continue;
+			String [] nextLine = null;
+			String[] Titles;
+			String bookname = HtmlPlugIn.Field.BookName.name();
+			boolean foundTitle = false;
+			while (!foundTitle &&(nextLine = reader.readNext()) != null) {
+				for(String s:nextLine){
+					s =s.trim();
+					if( s.equals(bookname) ){
+						foundTitle = true;
+						break;
 					}
-					Cell cell = sheet.getCell(col, row);
-					String text = cell.getContents().trim();
-					try{
-						HtmlPlugIn.Field field = HtmlPlugIn.Field.valueOf(Titles[col]);
-						switch(field){
-						case JavaScript:
-							text = readFromSd(new File(pluginsDir, text));
-							plugin.set(field, text);
-							break;
-						case CssFile:
-							if( text.length() > 0 ){
-								plugin.set(field, "plugins"+File.separator + text);
-							}
-							else{
-								plugin.set(field, null);
-							}
-							break;
-						case BookName:
-							if( text.length() == 0 ){
-								col = Titles.length;
-								plugin = null;
-								break;
-							}
-							/*flow through */
-						default:
-							plugin.set(field, text);
-							break;
+				}
+				//System.out.println("Name: [" + nextLine[0] + "]\nAddress: [" + nextLine[1] + "]\nEmail: [" + nextLine[2] + "]");
+			}
+			if( foundTitle ){
+				Titles = new String[nextLine.length];
+				for(int i=0; i<nextLine.length; i++ ){
+					Titles[i] = nextLine[i].trim();
+				}
+				while ((nextLine = reader.readNext()) != null) {
+					HtmlPlugIn plugin = new HtmlPlugIn();
+					for(int col=0; col<Titles.length; col++){
+						if( Titles[col] == null ){
+							continue;
 						}
 						
+						String text ="";
+						if( col < nextLine.length ){
+							text = nextLine[col].trim();
+						}
+						try{
+							HtmlPlugIn.Field field = HtmlPlugIn.Field.valueOf(Titles[col]);
+							switch(field){
+							case JavaScript:
+								text = readFromSd(new File(pluginsDir, text));
+								plugin.set(field, text);
+								break;
+							case CssFile:
+								if( text.length() > 0 ){
+									plugin.set(field, "plugins"+File.separator + text);
+								}
+								else{
+									plugin.set(field, null);
+								}
+								break;
+							case BookName:
+								if( text.length() == 0 ){
+									col = Titles.length;
+									plugin = null;
+									break;
+								}
+								/*flow through */
+							default:
+								plugin.set(field, text);
+								break;
+							}
+							
+						}
+						catch(IllegalArgumentException ex){
+							ex.printStackTrace();
+							throw ex;
+						}
 					}
-					catch(IllegalArgumentException ex){
-						ex.printStackTrace();
-						throw ex;
+					if( plugin != null ){
+						mHtmlPlugins.add(plugin);
 					}
-				}
-				if( plugin != null ){
-					mHtmlPlugins.add(plugin);
 				}
 			}
-			workbook.close();
+			reader.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

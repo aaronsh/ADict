@@ -1,0 +1,49 @@
+ver:,1,
+Description:,,
+Name,Code,
+HtmlOuter,"<html>
+-ADict-
+</html>",
+HeaderOuter,"<head>
+    <meta http-equiv=""Content-Type"" content=""text/html; charset=UTF-8"">
+    <link href=""css/default.css"" rel=""stylesheet"" type=""text/css"">
+    -ADict-
+    <script src=""dict.js"" type=""text/javascript""></script>
+    <script type=""text/javascript"">
+	var PlugIns = new Array();
+    </script>
+</head>",
+CssOuter,<link href="-ADict-" rel="stylesheet" type="text/css">,
+BodyOuter,"	<body >
+-ADict-
+	</body>",
+DictionaryHeader,<div id="-ADict-">,
+DictionaryBody,"<!-- dictionary -->
+-ADict-
+</div><!-- dictionary end -->",
+BooknameOuter,"		<div class=""bookNameBox"" onclick=""toggleDictContents(this)"">
+			<!--  bookname -->
+			<img class=""bookNameButton"" src=""img/close.png""></img>
+			<div class=""bookName"">-ADict-</div>
+		</div>
+		<div sytle=""clear:both;""></div>	
+		",
+WordsOuter,"<div class=""dictContents"" > <!-- search results -->
+-ADict-
+</div><!-- search results end -->",
+WordItemOuter,"<div> 
+-ADict-
+</div>",
+WordTextOuter,<div class="keyWord" onclick="toggleWord(this)">-ADict-</div>,
+WordExplanationOuter,"<div class=""wordBox"" >
+-ADict-
+</div>",
+JsOuter,"<script type=""text/javascript"">
+	-ADict-
+</script>"
+PluginJs1,"
+var plugin = new Object();
+plugin.name = '-ADict-';
+"
+PluginJs2,"plugin.func = -ADict-;
+PlugIns.push(plugin);"

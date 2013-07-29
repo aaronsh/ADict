@@ -70,7 +70,7 @@ public class DictEng {
 			if(!pluginsFolder.exists()){
 				pluginsFolder.mkdirs();
 			}
-			String[] files = {"html.xls","iciba.xls", "plugins.xls","dict.js",
+			String[] files = {"html.csv","iciba.csv", "plugins.csv","dict.js",
 							"img/background.png",
 							"img/close.png",
 							"img/dot_brown.png",

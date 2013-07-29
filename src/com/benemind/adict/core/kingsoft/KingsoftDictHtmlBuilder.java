@@ -1,7 +1,7 @@
 package com.benemind.adict.core.kingsoft;
 
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
@@ -10,19 +10,16 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import jxl.Cell;
-import jxl.Sheet;
-import jxl.Workbook;
+
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import com.benemind.util.StringUtils;
-import com.benemind.adict.core.kingsoft.IcibaConvertParam.ExcelColumnIndex;
 
-import android.content.Context;
 import android.util.Log;
 import android.util.Xml;
+import au.com.bytecode.opencsv.CSVReader;
 
 public class KingsoftDictHtmlBuilder {
 	private static final String TAG = "KingsoftDictHtmlBuilder";
@@ -218,58 +215,64 @@ public class KingsoftDictHtmlBuilder {
 	
 	public static void loadConvertParam(File Folder){
 		ArrayList<IcibaConvertParam> list = new ArrayList<IcibaConvertParam>(); 
-		try {  
-            Workbook workbook = null;  
-            InputStream in = null;  
+		try {
+			File file = new File(Folder, "iciba.csv");
+			CSVReader reader;
+			
             try {
-            	File file = new File(Folder, "iciba.xls");    
-            	in = new FileInputStream(file);    
-                workbook = Workbook.getWorkbook(in); 
-                workbook.getNumberOfSheets();
+            	reader = new CSVReader(new FileReader(file));
             } catch (Exception e) {  
                 e.printStackTrace();  
                 throw new Exception("file not found!");  
             }  
-            Sheet sheet = workbook.getSheet(0);  
-            Cell cell = null;  
-            int rowCount = sheet.getRows();
 			//load map
 			IcibaConvertParam.ExcelColumnIndex[] columns = IcibaConvertParam.ExcelColumnIndex.values();
 			int[] map = new int[columns.length];
 			for(int index=0; index<columns.length; index++){
 				map[index] = -1;
 			}
-			Cell[] cells = sheet.getRow(2);
-			for(int col=0; col<cells.length; col++){
-				Cell c = cells[col];
-				String s = c.getContents().trim();
-				for(int j=0; j<columns.length; j++ ){
-					IcibaConvertParam.ExcelColumnIndex excelCol = columns[j];
-					if( s.equalsIgnoreCase(excelCol.name()) ){
-						map[j] = col;
+			String [] nextLine;
+			boolean foundTitle = false;
+			String tag = columns[0].name();
+			while ((nextLine = reader.readNext()) != null) {
+				if( nextLine.length > 0 ){
+					String s = nextLine[0].trim();
+					if( s.equals(tag) ){
+						foundTitle = true;
+						for(int col=0; col<nextLine.length; col++){
+							s = nextLine[col].trim();
+							for(int j=0; j<columns.length; j++ ){
+								IcibaConvertParam.ExcelColumnIndex excelCol = columns[j];
+								if( s.equalsIgnoreCase(excelCol.name()) ){
+									map[j] = col;
+									break;
+								}
+							}
+						}
 						break;
 					}
 				}
 			}
 			
-			//read excel file
-            for(int row=3; row<rowCount; row++){ //skip first two rows
-            	IcibaConvertParam paramItem = new IcibaConvertParam();
-            	for(int col=0; col<map.length; col++){
-            		if( map[col] == -1 ){
-            			continue;
-            		}
-            		cell = sheet.getCell(map[col], row);
-            		String s = "";
-            		if( cell != null ){
-            			s = cell.getContents().trim();
-            		}
-            		paramItem.set(columns[col], s);
-            	}
-            	list.add(paramItem);
-            }
-            workbook.close();
-            
+			if( foundTitle ){
+				while ((nextLine = reader.readNext()) != null) {
+					IcibaConvertParam paramItem = new IcibaConvertParam();
+	            	for(int col=0; col<map.length; col++){
+	            		if( map[col] == -1 ){
+	            			continue;
+	            		}
+	            		String s = "";
+	            		int pos = map[col];
+	            		if( pos < nextLine.length ){
+	            			s = nextLine[pos].trim();
+	            		}
+	            		paramItem.set(columns[col], s);
+	            	}
+	            	list.add(paramItem);
+				}
+			}
+			reader.close();
+			
             ConvertParamList = list;
         } catch (Exception e) {  
             e.printStackTrace();  
