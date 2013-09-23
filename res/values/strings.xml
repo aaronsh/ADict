@@ -8,4 +8,5 @@
      <string name="about_ok">确定</string>
 
  <string name="loading_dictionaries">正在装载词典，请稍后……</string>
+ <string name="acra_report">软件发生异常，正在提交异常报告</string>
 </resources>
