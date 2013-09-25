@@ -61,7 +61,9 @@ public class DictHtmlBuilder {
 				js = js.replaceFirst("publishDict", funcName);
 				StringBuilder jsCode = new StringBuilder();
 				jsCode.append(js);
+				jsCode.append("\n");
 				jsCode.append(build(HtmlSectionType.PluginJs1, funcName));
+				jsCode.append("\n");
 				jsCode.append(build(HtmlSectionType.PluginJs2, funcName));
 				innerHtml.append(build(HtmlSectionType.JsOuter, jsCode.toString()));
 				text = innerHtml.toString();

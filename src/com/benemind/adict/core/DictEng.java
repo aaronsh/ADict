@@ -25,6 +25,11 @@ import android.util.Log;
 
 public class DictEng {
 	private static final String TAG = "DictEng";
+	
+	public static final int LOAD_DICTS_SUCC = 0;
+	public static final int NO_DICT_ON_CARD = 1;
+	public static final int NO_ACTIVE_DICT = 2;
+	
 
 	static DictEng mIns = null;
 
@@ -142,14 +147,16 @@ public class DictEng {
 		}   
 	}
 
-	public void loadDicts() throws NotFoundDictException {
+	public int loadDicts() {
+		int retCode = LOAD_DICTS_SUCC;
+		
 		mActiveDicts.clear();
 		ArrayList<Dictionary> onCardList = scanCard();
+		if (onCardList.isEmpty()) {
+			retCode = NO_DICT_ON_CARD;
+		}
 		onCardList.add(new OnlineDictionary("有道在线词典"));
 		onCardList.add(new OnlineDictionary("QQ在线词典"));
-		if (onCardList.isEmpty()) {
-			throw new NotFoundDictException();
-		}
 
 		ArrayList<Dictionary> savedList = loadDictList();
 		if (!savedList.isEmpty()) {
@@ -179,9 +186,13 @@ public class DictEng {
 				mActiveDicts.add(dict);
 			}
 		}
-
+		if( mActiveDicts.isEmpty() ){
+			retCode = NO_ACTIVE_DICT;
+		}
 		Log.v(TAG, "active dicts:" + mActiveDicts.size() + mActiveDicts);
 		onCardList.clear();
+		
+		return retCode;
 	}
 
 	public ArrayList<String> listWords(String key) {

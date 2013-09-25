@@ -1,11 +1,11 @@
 ﻿function publishDict(DictDiv) {
 /*  qq_online.js    */ 
- 	var onQueryFinish = function(status, responseText, container){
+ 	var onQueryFinish = function(status, jsonpData, container){
 		if( status != 200 ){
 			container.innerText = "查询失败！";
 			return;
 		}
-		var dict = JSON.parse(responseText);
+		var dict = jsonpData;
 		if( dict.err != undefined ){
 			container.innerText = dict.err;
 			return;
@@ -105,11 +105,7 @@
 		container.innerHTML = html;
 		container.appendChild(wordBox);
 	}
-	var wordDiv = DictDiv.getElementsByTagName('word')[0];
-	var word = wordDiv.innerHTML;
-	var contentsDiv = wordDiv.parentElement;
-	//console.log(fixPhonetic('fixPhonetic'));
-	queryOnlineDict('http://dict.qq.com/dict?q='+encodeURIComponent(word), onQueryFinish, contentsDiv);
+	
 	var phoneticHandler = function(phonetic){
         var arr = phonetic.split('; ');
         var html = '';
@@ -126,5 +122,18 @@
         }
         return html;
     }
+    
+    if(DictDiv.toString() == '[object HTMLDivElement]'){
+    	var wordDiv = DictDiv.getElementsByTagName('word')[0];
+		var word = wordDiv.innerHTML;
+		var contentsDiv = wordDiv.parentElement;
+		//console.log(fixPhonetic('fixPhonetic'));
+		this.container = contentsDiv;
+		
+		queryOnlineDict('http://dict.qq.com/dict?q='+encodeURIComponent(word), getJsonpCallback(this));
+	}
+	else{
+		onQueryFinish(DictDiv.status.http_code, DictDiv.contents, this.container);
+	}
 	return;
 }

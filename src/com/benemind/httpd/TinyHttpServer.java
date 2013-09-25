@@ -57,7 +57,7 @@ public class TinyHttpServer implements Runnable {
 		mServeThread = null;
 		mServerRunning = false;
 
-		mServerRoot = new File("/mnt/sdcard/voa/dict/html");
+		mServerRoot = new File("/mnt/sdcard/adict/html");
 		mReqHandlers = new LinkedList<TinyHttpRequestHandler>();
 	}
 

@@ -174,36 +174,31 @@ function fixPhonetic(text){
 	return s;
 }
 
-function queryOnlineDict(dictUrl, onQueryFinish, targetDiv){
-    var ajaxReq = new XMLHttpRequest();
-	if(ajaxReq) {
-		ajaxReq.targetDiv = targetDiv;
-    	ajaxReq.onreadystatechange = function(){
-        	if(ajaxReq.readyState == 4){
-            	var txt = ajaxReq.responseText;
-           		console.log(txt);
-           		onQueryFinish(ajaxReq.status, txt, ajaxReq.targetDiv);
-        	}
-    	};
-    	ajaxReq.open("GET","ajax?url="+encodeURIComponent(dictUrl),true);
-        //ajaxReq.open("GET","ajax.html?url="+encodeURIComponent('http://fanyi.youdao.com/openapi.do?keyfrom=N3verL4nd&key=208118276&type=data&doctype=json&version=1.1&q=dog'),true);
-        //ajaxReq.open("GET","ajax.html?url="+encodeURIComponent('http://dict.qq.com/dict?q=word'),true);
-        //ajaxReq.open("GET","ajax.html?url="+encodeURIComponent('http://dict-co.iciba.com/api/dictionary.php?w=word'),true);
-        //ajaxReq.open("GET","ajax.html?url="+encodeURIComponent('http://dict.baidu.com/s?wd=test'),true);
-        ajaxReq.setRequestHeader('Content-Type', 'text/plain');
-        ajaxReq.withCredentials = "true";
-        ajaxReq.send(null);
-    }else {
-        alert('Sorry, your browser doesn\'t support XMLHttpRequest');
-    }
+
+
+function queryOnlineDict(dictUrl, jsonpCallback){
+    var url = encodeURIComponent(dictUrl);
+    var JSONP=document.createElement("script");  
+    JSONP.type="text/javascript";  
+    JSONP.src="http://mobilevoa.duapp.com/proxy.php?callback=" + jsonpCallback + "&url="+url;  
+    document.getElementsByTagName("head")[0].appendChild(JSONP);  
 }
+
+function getJsonpCallback(publishDictObj){
+	for(var i=0; i<PlugIns.length; i++){
+		if( PlugIns[i] == publishDictObj ){
+			return 'PlugIns['+i+'].func';
+		}
+	}
+	return null;
+}
+
 function handlePlugins() {
 	console.log("handlePlugins 1");
 	for(var i=0; i<PlugIns.length; i++){
-//		console.log(i+" name:"+PlugIns[i].name+" func:"+PlugIns[i].func);
-		var plugin = PlugIns[i];
-		var e = document.getElementById(plugin.name);
-		plugin.func(e);
+		var dictHandler = PlugIns[i];
+		var e = document.getElementById(dictHandler.name);
+		dictHandler.func(e);
 	}
 }
 
