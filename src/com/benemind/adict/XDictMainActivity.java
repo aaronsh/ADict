@@ -66,6 +66,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.SubMenu;
 import com.benemind.adict.R;
+import com.benemind.util.AboutDialog;
 import com.benemind.util.DialogUtils;
 import com.benemind.util.FileUtils;
 import com.benemind.adict.core.DictConsts;
@@ -84,12 +85,11 @@ public class XDictMainActivity extends SherlockActivity implements
 	protected static final int MSG_LIST_WORDS = 0;
 	protected static final int MSG_REDIRECT_WORD = 1;
 
-	private static final int MENU_ID_DICT_MGR = 0;
-
-	private static final int ACTION_LIST_WORDS = 0;
-	private static final int ACTION_SEARCH_WORD = 1;
-	private static final int MENU_ID_HISTORY = 11;
-	private static final int MENU_ID_SETTINGS = 12;
+	private static final int MENU_ID_DICT_MGR = 1;
+	private static final int MENU_ID_SYS = 0;
+	
+	private static final int MENU_ID_WEBSITE = 11;
+	private static final int MENU_ID_HELP = 12;
 	private static final int MENU_ID_APP_STORE = 13;
 	private static final int MENU_ID_ABOUT = 14;
 	private static final int MENU_ID_APP_SHARE = 15;
@@ -186,14 +186,14 @@ public class XDictMainActivity extends SherlockActivity implements
 
 
 		SubMenu subMenu2 = menu.addSubMenu("Main menu");
-//		subMenu2.add(1, MENU_ID_HISTORY, Menu.NONE, R.string.menu_history);
-//		subMenu2.add(1, MENU_ID_SETTINGS, Menu.NONE, R.string.menu_settings);
+		subMenu2.add(1, MENU_ID_WEBSITE, Menu.NONE, R.string.menu_website);
+		subMenu2.add(1, MENU_ID_HELP, Menu.NONE, R.string.menu_help);
 		subMenu2.add(1, MENU_ID_APP_STORE, Menu.NONE, R.string.menu_app_store);
 		subMenu2.add(1, MENU_ID_APP_SHARE, Menu.NONE, R.string.menu_share);
 		subMenu2.add(1, MENU_ID_ABOUT, Menu.NONE, R.string.menu_about);
 
 		MenuItem subMenu2Item = subMenu2.getItem();
-		subMenu2Item.setIcon(R.drawable.ic_refresh);
+		subMenu2Item.setIcon(R.drawable.ic_menu_more);
 		subMenu2Item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -207,15 +207,15 @@ public class XDictMainActivity extends SherlockActivity implements
 			Intent intent = new Intent(this, DictMgrActivity.class);
 			this.startActivityForResult(intent, 0);
 			break;
-		case MENU_ID_HISTORY:
+		case MENU_ID_WEBSITE:
 			break;
-		case MENU_ID_SETTINGS:
+		case MENU_ID_HELP:
 			break;
 		case MENU_ID_APP_STORE:
 			
 			break;
 		case MENU_ID_ABOUT:
-			//new AboutDialog(this).show();
+			new AboutDialog(this).show();
 			break;
 		case MENU_ID_APP_SHARE:
 			

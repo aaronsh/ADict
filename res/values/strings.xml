@@ -6,12 +6,26 @@
     <string name="hello_world">Hello world!</string>
     <string name="menu_refresh">Refresh</string>
     <string name="about_ok">确定</string>
-    <string name="menu_settings">Settings</string>
+    <string name="menu_help">帮助</string>
     <string name="menu_about">关于</string>
     <string name="menu_app_store">应用市场</string>
     <string name="menu_share">分享</string>
-    <string name="menu_refresh">Refresh</string>
+    <string name="menu_website">网站</string>
     <string name="loading_dictionaries">正在装载词典，请稍后……</string>
     <string name="acra_report">软件发生异常，正在提交异常报告</string>
+    <string name="about_text"><Data>
+<![CDATA[  
+    <b>作者: 西红柿真好吃</b>  
+    <br/>   
+    <br/>
+    <b>联系：<a href="mailto:rib.liu@qq.com?subject=逆向巧学VOA软件反馈意见">rib.liu@qq.com</a></b>  
+    <br/>
+    <br/>
+    <p><b>逆向巧学VOA</b>是一款采用voa慢速英语为学习材料，通过钟道隆的<a href="http://www.listeningexpress.com/nx_method/">逆向学习法</a>进行英语学习的软件，是英语学习的一大利器！</p>      
+    <br/>
+    <br/>
+    <b>有任何建议或者反馈可以随时联系作者</b>   ]]>
+</Data></string>
+
 
 </resources>
