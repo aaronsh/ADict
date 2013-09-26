@@ -64,6 +64,7 @@ import android.widget.TextView.OnEditorActionListener;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.SubMenu;
 import com.benemind.adict.R;
 import com.benemind.util.DialogUtils;
 import com.benemind.util.FileUtils;
@@ -87,12 +88,20 @@ public class XDictMainActivity extends SherlockActivity implements
 
 	private static final int ACTION_LIST_WORDS = 0;
 	private static final int ACTION_SEARCH_WORD = 1;
-
+	private static final int MENU_ID_HISTORY = 11;
+	private static final int MENU_ID_SETTINGS = 12;
+	private static final int MENU_ID_APP_STORE = 13;
+	private static final int MENU_ID_ABOUT = 14;
+	private static final int MENU_ID_APP_SHARE = 15;
+	private static final int MENU_ID_REFRESH = 21;
+	
+	
 	enum DictAction {
 		LIST_WORDS, SEARCH_WORD
 	}
 	
 	TinyHttpServer mHttpServer = null;
+	int mServerPort = 0;
 
 	AutoCompleteTextView mSearchInput;
 	WebView mSearchResult;
@@ -175,6 +184,17 @@ public class XDictMainActivity extends SherlockActivity implements
 		refreshItem.setIcon(R.drawable.ic_menu_books);
 		refreshItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
+
+		SubMenu subMenu2 = menu.addSubMenu("Main menu");
+//		subMenu2.add(1, MENU_ID_HISTORY, Menu.NONE, R.string.menu_history);
+//		subMenu2.add(1, MENU_ID_SETTINGS, Menu.NONE, R.string.menu_settings);
+		subMenu2.add(1, MENU_ID_APP_STORE, Menu.NONE, R.string.menu_app_store);
+		subMenu2.add(1, MENU_ID_APP_SHARE, Menu.NONE, R.string.menu_share);
+		subMenu2.add(1, MENU_ID_ABOUT, Menu.NONE, R.string.menu_about);
+
+		MenuItem subMenu2Item = subMenu2.getItem();
+		subMenu2Item.setIcon(R.drawable.ic_refresh);
+		subMenu2Item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -187,6 +207,22 @@ public class XDictMainActivity extends SherlockActivity implements
 			Intent intent = new Intent(this, DictMgrActivity.class);
 			this.startActivityForResult(intent, 0);
 			break;
+		case MENU_ID_HISTORY:
+			break;
+		case MENU_ID_SETTINGS:
+			break;
+		case MENU_ID_APP_STORE:
+			
+			break;
+		case MENU_ID_ABOUT:
+			//new AboutDialog(this).show();
+			break;
+		case MENU_ID_APP_SHARE:
+			
+			break;
+		case MENU_ID_REFRESH:
+			
+			break;
 		}
 		return true;
 	}
@@ -196,6 +232,23 @@ public class XDictMainActivity extends SherlockActivity implements
 		// setTheme(SampleList.THEME); //Used for theme switching in samples
 
 		super.onCreate(savedInstanceState);
+		Log.v(TAG, "onCreate");
+		mHttpServer = new TinyHttpServer(8083);
+		mHttpServer.addRequestHandler(this);
+		File RootFolder = FileUtils.getDictDir();
+		File HtmlFolder = new File(RootFolder, "html");
+		mHttpServer.setServerRoot(HtmlFolder);
+		mHttpServer.startServer();
+		while(mHttpServer.isStartingUp()){
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		mServerPort = mHttpServer.getServerPort();
+		
 		setContentView(R.layout.xdict_main);
 
 		mSearchInput = (AutoCompleteTextView) findViewById(R.id.word_for_search);
@@ -219,13 +272,8 @@ public class XDictMainActivity extends SherlockActivity implements
 		mSearchResult.setWebChromeClient(chromeClient);
 		//mSearchResult.reload();
 		
-		mHttpServer = new TinyHttpServer(8083);
-		mHttpServer.addRequestHandler(this);
-		File RootFolder = FileUtils.getDictDir();
-		File HtmlFolder = new File(RootFolder, "html");
-		mHttpServer.setServerRoot(HtmlFolder);
-		mHttpServer.startServer();
-		mSearchResult.loadUrl("http://localhost:8083/welcome.html");
+
+		mSearchResult.loadUrl(buildUrl("welcome.html"));
 		
 		
 		mListWordTaskRunning = false;
@@ -275,7 +323,7 @@ public class XDictMainActivity extends SherlockActivity implements
 					setSearchInputText(word);
 				}
 			}else{
-				mSearchResult.loadUrl("http://localhost:8083/help.html");
+				mSearchResult.loadUrl(buildUrl("help.html"));
 			}
 		} else {
 			loadDictsTask loadTask = new loadDictsTask();
@@ -300,6 +348,7 @@ public class XDictMainActivity extends SherlockActivity implements
 	}
 	
 	protected void onDestroy(){
+		Log.v(TAG, "onDestroy");
 		mHttpServer.stopServer();
 		super.onDestroy();
 	}
@@ -468,7 +517,7 @@ public class XDictMainActivity extends SherlockActivity implements
 					setSearchInputText(word);
 				}
 			} else {
-				mSearchResult.loadUrl("http://localhost:8083/help.html");
+				mSearchResult.loadUrl(buildUrl("help.html"));
 
 				InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 				inputMethodManager.hideSoftInputFromWindow(
@@ -489,7 +538,7 @@ public class XDictMainActivity extends SherlockActivity implements
 	private void showWordSearchResult(String htmlContent) {
 		// TODO Auto-generated method stub
 		mIndexHtmlContent = htmlContent;
-		mSearchResult.loadUrl("http://localhost:8083/index.html");
+		mSearchResult.loadUrl(buildUrl("index.html"));
 //		mSearchResult.loadUrl("http://127.0.0.1:8080/index.html");
 //		mSearchResult.loadDataWithBaseURL("file:///mnt/sdcard/voa/dict/html/", htmlContent,
 //				"text/html", "utf-8", null);
@@ -605,4 +654,11 @@ public class XDictMainActivity extends SherlockActivity implements
 		return false;
 	}
 	
+	private String buildUrl(String path){
+		StringBuilder b = new StringBuilder("http://localhost:");
+		b.append(mServerPort);
+		b.append("/");
+		b.append(path);
+		return b.toString();
+	}
 }

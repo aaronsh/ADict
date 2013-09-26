@@ -49,13 +49,20 @@ public class TinyHttpServer implements Runnable {
 			"js			text/javascript " };
 
 	private Thread mServeThread;
-	private boolean mServerRunning;
+	private int mServerRunning;
 	private int mPort;
-
+	
+	private static final int STAT_IDLE = 0;
+	private static final int STAT_TO_START_UP = 1;
+	private static final int STAT_STARTING_UP = 2;
+	private static final int STAT_RUNNING = 3;
+	private static final int STAT_TO_SHUTDOWN = 4;
+	private static final int STAT_SHUTTING_DOWN = 5;
+	
 	public TinyHttpServer(int port) {
 		mPort = port;
 		mServeThread = null;
-		mServerRunning = false;
+		mServerRunning = STAT_IDLE;
 
 		mServerRoot = new File("/mnt/sdcard/adict/html");
 		mReqHandlers = new LinkedList<TinyHttpRequestHandler>();
@@ -83,25 +90,65 @@ public class TinyHttpServer implements Runnable {
 	}
 
 	public void startServer() {
+		switch(mServerRunning){
+		case STAT_IDLE:
+			mServerRunning = STAT_TO_START_UP;
+			break;
+		case STAT_TO_START_UP:
+			break;
+		case STAT_STARTING_UP:
+		case STAT_RUNNING:
+			return;
+		case STAT_TO_SHUTDOWN:
+		case STAT_SHUTTING_DOWN:
+			stopServer();
+			mServerRunning = STAT_TO_START_UP;
+			break;
+		}
 		mServeThread = new Thread(this);
 		mServeThread.start();
 	}
 
 	public void stopServer() {
-		mServerRunning = false;
+		switch(mServerRunning){
+		case STAT_IDLE:
+			return;
+		case STAT_TO_START_UP:
+		case STAT_STARTING_UP:
+		case STAT_RUNNING:
+			mServerRunning = STAT_TO_SHUTDOWN;
+			break;
+		case STAT_TO_SHUTDOWN:
+			break;
+		case STAT_SHUTTING_DOWN:
+			break;
+		}
+		
 		try {
 			mServeThread.join();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		mServerRunning = STAT_IDLE;
+
 		mServeThread = null;
+	}
+	
+	public boolean isRunning(){
+		return STAT_RUNNING == mServerRunning;
+	}
+	
+	public boolean isStartingUp(){
+		if( (STAT_STARTING_UP == mServerRunning) || (STAT_TO_START_UP == mServerRunning) ){
+			return true;
+		}
+		return false;
 	}
 
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		mServerRunning = true;
 		ServerSocket serversocket = null;
 		try {
 			while (true) {
@@ -109,6 +156,7 @@ public class TinyHttpServer implements Runnable {
 					serversocket = new ServerSocket(mPort);
 					serversocket.setReuseAddress(true);
 					serversocket.setSoTimeout(200);
+					Log.v(TAG, "start server at port:"+mPort);
 					break;
 				} catch (java.net.BindException bindException) {
 					bindException.printStackTrace();
@@ -116,8 +164,21 @@ public class TinyHttpServer implements Runnable {
 				}
 			}
 			Log.v(TAG, "port:" + mPort);
+			switch(mServerRunning){
+			case STAT_IDLE:
+				Log.v(TAG, "wroing state IDLE");
+				break;
+			case STAT_TO_START_UP:
+			case STAT_STARTING_UP:
+				mServerRunning = STAT_RUNNING;
+			case STAT_RUNNING:
+			case STAT_TO_SHUTDOWN:
+			case STAT_SHUTTING_DOWN:
+				/*do nothing for these three stats*/
+				break;
+			}
 
-			while (mServerRunning) {
+			while (mServerRunning == STAT_RUNNING) {
 				Socket connection = null;
 				try {
 					connection = serversocket.accept();
@@ -129,11 +190,14 @@ public class TinyHttpServer implements Runnable {
 					continue;
 				}
 			}
+			serversocket.close();
 		} catch (SocketException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		mServerRunning = STAT_IDLE;
 		System.out.println("httpD terminated");
 	}
 
@@ -362,5 +426,10 @@ public class TinyHttpServer implements Runnable {
 			}
 		}
 		return MIME_DEFAULT_BINARY;
+	}
+
+	public int getServerPort() {
+		// TODO Auto-generated method stub
+		return mPort;
 	}
 }
