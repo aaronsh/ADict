@@ -2,21 +2,20 @@ package com.benemind.adict.core;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 
-public class IfoFile {
-	public static final String KEY_BOOKNAME = "bookname";
-	public static final String KEY_wordcount = "wordcount";
-	public static final String KEY_idxfilesize = "idxfilesize";
-	public static final String KEY_sametypesequence = "sametypesequence";
-	public static final String KEY_DictType = "DictType";
+public class ADictFile {
+	public static final String KEY_LIST_URL = "listWebApi";
+	public static final String KEY_JS = "js";
+	public static final String KEY_CSS = "css";
 	
 	HashMap<String, String> mMap;
 	
-	public IfoFile(File file) {
+	public ADictFile(File file) {
 		// TODO Auto-generated constructor stub
 		mMap = new HashMap<String, String>();
 		readIniFile(file);
@@ -30,7 +29,7 @@ public class IfoFile {
 			String line = reader.readLine();
 			if( line != null )
 				line = line.trim();
-			if( line != null && line.equals("StarDict's dict ifo file") ){
+			if( line != null && line.equals("﻿ADict extension file") ){
 				try {
 					while( (line = reader.readLine()) != null ){
 						String[] parts = line.split("=");
@@ -60,5 +59,40 @@ public class IfoFile {
 	String getValue(String key)
 	{
 		return mMap.get(key);
+	}
+
+	public String getJs() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getJs(File dictPath) {
+		// TODO Auto-generated method stub
+		String s = getValue(KEY_JS);
+		if( s != null && s.length() > 0 ){
+			File file = new File(dictPath, s);
+			return readFromSd(file);
+		}
+		return null;
+	}
+	
+
+	private static String readFromSd(File file) {
+		try{
+			FileInputStream fin = new FileInputStream(file);   
+
+			int length = fin.available();   
+
+			byte [] buffer = new byte[length];
+			fin.read(buffer);
+			String s = new String(buffer);
+			fin.close();
+			return s;
+		}
+
+		catch(Exception e){   
+			e.printStackTrace();   
+		}   
+		return null;
 	}
 }

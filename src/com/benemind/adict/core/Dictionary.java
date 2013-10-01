@@ -33,6 +33,10 @@ public class Dictionary {
 	private DictFile mFileDict;
 	protected boolean mLoaded;
 	
+	private String mJavascriptText;
+	private String mCssLink;
+	private String mListWebApi;
+	
 	private long mDictManagementID;
 	
 	protected int DictState = DICT_STATE_UNINSTALLED;
@@ -45,6 +49,10 @@ public class Dictionary {
 		mFileDict = null;
 		mLoaded = false;
 		mDictManagementID = 0;
+		
+		mJavascriptText = null;
+		mCssLink = null;
+		mListWebApi = null;
 	}
 
 	
@@ -155,12 +163,10 @@ public class Dictionary {
 			if( f.isFile() ){
 				String name = f.getName();
 				if( name.endsWith(".ifo") ){
-					dict = new Dictionary();
 					dictName = name.replace(".ifo", "");
-					dict.DictPath = dictRoot.getName();
-					dict.DictName = dictName;
-					dict.load();
-					if(  dict.getDictState() != DICT_STATE_UNINSTALLED ){
+					String dictPath = dictRoot.getName();
+					dict = load(dictPath, dictName);
+					if(  dict != null ){
 						break;
 					}
 					dict = null;
@@ -172,62 +178,120 @@ public class Dictionary {
 	}
 
 	//load dictionary from disk
-	boolean load() {
+	static Dictionary load(String dictPath, String dictName) {
 		// TODO Auto-generated method stub
-		mLoaded = true;
+		Dictionary dict = null;
 		
 		DictEng eng = DictEng.getInstance(null);
 		
-		File dir = new File(eng.getBookFolder(), DictPath);
+		File dir = new File(eng.getBookFolder(), dictPath);
 		if( !dir.exists() || !dir.isDirectory() ){
-			DictState = DICT_STATE_UNINSTALLED;
-			return false;
+			return null;
 		}
 
 		//load 'ifo' file
-		File file = new File(dir, DictName+".ifo");
+		File file = new File(dir, dictName+".ifo");
 		if( !file.exists() || file.isDirectory() ){
-			DictState = DICT_STATE_UNINSTALLED;
-			return false;
+			return null;
 		}
 		
-		mFileInfo = new IfoFile(file);
-		BookName = mFileInfo.getValue(IfoFile.KEY_BOOKNAME);
+		IfoFile FileInfo = new IfoFile(file);
+		String BookName = FileInfo.getValue(IfoFile.KEY_BOOKNAME);
 		
-		//load 'dict' file
-		file = new File(dir, DictName + ".dict");
-		if( !file.exists() || file.isDirectory() ){
-			file = new File(dir, DictName + ".dict.dz");
-			if( !file.exists() || file.isDirectory() ){
-				DictState = DICT_STATE_DESTROYED;
-				return false;
+		String ListWebApi = null;
+		String JavascriptText = null;
+		String CssLink = null;
+		
+		String wordCount = FileInfo.getValue(IfoFile.KEY_wordcount);
+		String indexFileSize = FileInfo.getValue(IfoFile.KEY_idxfilesize);
+		//load plugin form table
+		DefaultPlugIn plugin = DefaultPlugIn.findMatchPluagIn(BookName, wordCount, indexFileSize);
+		if( plugin != null ){
+			ListWebApi = null;
+			JavascriptText = plugin.get(DefaultPlugIn.Field.JavaScript);
+			CssLink = null;
+		}
+		//load 'Adict' file
+		file = new File(dir, dictName+".adict");
+		if( file.exists() && file.isFile() ){
+			ADictFile adict = new ADictFile(file);
+			String s = adict.getValue(ADictFile.KEY_LIST_URL);
+			if( s!=null && s.length() > 0 ){
+				ListWebApi = s;
+			}
+			
+			JavascriptText = adict.getJs(dir);
+			s = adict.getValue(ADictFile.KEY_CSS);
+			if( s!=null && s.length() > 0 ){
+				StringBuilder sb = new StringBuilder();
+				sb.append("books/");
+				sb.append(dictPath);
+				sb.append("/");
+				sb.append(s);
+				CssLink = s.toString();
 			}
 		}
-		mFileDict = new DictFile(file, mFileInfo.getValue(IfoFile.KEY_sametypesequence));
+		
+		if( wordCount == null || wordCount.length() == 0 || indexFileSize == null || indexFileSize.length() == 0 ){
+			dict =  new OnlineDictionary(BookName);
+			dict.DictName = dictName;
+			dict.DictPath = dictPath;
+			dict.mLoaded = true;
+			dict.mFileInfo = FileInfo;
+			dict.mJavascriptText = JavascriptText;
+			dict.mCssLink = CssLink;
+			dict.mListWebApi = ListWebApi;
+			return dict;
+		}
+		//load 'dict' file
+		file = new File(dir, dictName + ".dict");
+		if( !file.exists() || file.isDirectory() ){
+			file = new File(dir, dictName + ".dict.dz");
+			if( !file.exists() || file.isDirectory() ){
+				dict =  new Dictionary(BookName);
+				dict.setState(DICT_STATE_DESTROYED);
+				return dict;
+			}
+		}
+		DictFile FileDict = new DictFile(file, FileInfo.getValue(IfoFile.KEY_sametypesequence));
 		
 		//load 'idx' file
-		file = new File(dir, DictName + ".idx");
+		file = new File(dir, dictName + ".idx");
 		if( !file.exists() || file.isDirectory() ){
-			DictState = DICT_STATE_DESTROYED;
-			return false;
+			dict =  new Dictionary(BookName);
+			dict.setState(DICT_STATE_DESTROYED);
+			return dict;
 		}
 		
-		mFileIndex = new IdxFile(file);
-		if( !mFileIndex.check(mFileInfo.getValue(IfoFile.KEY_idxfilesize)) ){
-			DictState = DICT_STATE_DESTROYED;
-			return false;
+		IdxFile FileIndex = new IdxFile(file);
+		if( !FileIndex.check(FileInfo.getValue(IfoFile.KEY_idxfilesize)) ){
+			dict =  new Dictionary(BookName);
+			dict.setState(DICT_STATE_DESTROYED);
+			return dict;
 		}
 		try {
-			mFileIndex.load();
+			FileIndex.load();
 		} catch (IllegalIndexFileException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			DictState = DICT_STATE_DESTROYED;
-			return false;
+			dict =  new Dictionary(BookName);
+			dict.setState(DICT_STATE_DESTROYED);
+			return dict;
 		}
 		
-		DictState = DICT_STATE_INSTALLED;
-		return true;
+
+		dict =  new Dictionary(BookName);
+		dict.setState(DICT_STATE_INSTALLED);
+		dict.DictName = dictName;
+		dict.DictPath = dictPath;
+		dict.mLoaded = true;
+		dict.mFileInfo = FileInfo;
+		dict.mFileIndex = FileIndex;
+		dict.mFileDict = FileDict;
+		dict.mJavascriptText = JavascriptText;
+		dict.mCssLink = CssLink;
+		dict.mListWebApi = ListWebApi;
+		return dict;
 	}
 
 
@@ -236,14 +300,6 @@ public class Dictionary {
 		return toJsonStr();
 	}
 
-
-	private int getDictState() {
-		if( !mLoaded ){
-			load();
-		}
-		return DictState;
-	}
-	
 
 	public int getState() {
 		// TODO Auto-generated method stub
@@ -337,5 +393,17 @@ public class Dictionary {
 			}
 		}		
 		return true;
+	}
+
+
+	public String getCssLink() {
+		// TODO Auto-generated method stub
+		return mCssLink;
+	}
+
+
+	public String getJavascript() {
+		// TODO Auto-generated method stub
+		return mJavascriptText;
 	}
 }

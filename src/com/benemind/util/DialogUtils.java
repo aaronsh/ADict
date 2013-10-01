@@ -2,6 +2,7 @@ package com.benemind.util;
 
 import com.benemind.adict.R;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
@@ -33,5 +34,21 @@ public class DialogUtils {
 		  });
 		  builder.create().show();
 	  }
+
+
+
+	public static void showNoMarketApp(Activity cntx) {
+		// TODO Auto-generated method stub
+		  AlertDialog.Builder builder = new AlertDialog.Builder(cntx);
+		  builder.setTitle(R.string.app_name);
+		  builder.setMessage(R.string.market_no_app_msg);
+		  builder.setPositiveButton(R.string.market_no_app_ok, new DialogInterface.OnClickListener() {
+			  @Override
+			  public void onClick(DialogInterface dialog, int which) {
+				  dialog.dismiss();
+			  }
+		  });
+		  builder.create().show();		
+	}
 
 }

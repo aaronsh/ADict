@@ -36,8 +36,10 @@ import org.apache.http.util.EntityUtils;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -188,8 +190,8 @@ public class XDictMainActivity extends SherlockActivity implements
 		SubMenu subMenu2 = menu.addSubMenu("Main menu");
 		subMenu2.add(1, MENU_ID_WEBSITE, Menu.NONE, R.string.menu_website);
 		subMenu2.add(1, MENU_ID_HELP, Menu.NONE, R.string.menu_help);
-		subMenu2.add(1, MENU_ID_APP_STORE, Menu.NONE, R.string.menu_app_store);
-		subMenu2.add(1, MENU_ID_APP_SHARE, Menu.NONE, R.string.menu_share);
+//		subMenu2.add(1, MENU_ID_APP_STORE, Menu.NONE, R.string.menu_app_store);
+//		subMenu2.add(1, MENU_ID_APP_SHARE, Menu.NONE, R.string.menu_share);
 		subMenu2.add(1, MENU_ID_ABOUT, Menu.NONE, R.string.menu_about);
 
 		MenuItem subMenu2Item = subMenu2.getItem();
@@ -208,8 +210,10 @@ public class XDictMainActivity extends SherlockActivity implements
 			this.startActivityForResult(intent, 0);
 			break;
 		case MENU_ID_WEBSITE:
+			openWebsite();
 			break;
 		case MENU_ID_HELP:
+			openHelp();
 			break;
 		case MENU_ID_APP_STORE:
 			
@@ -226,6 +230,38 @@ public class XDictMainActivity extends SherlockActivity implements
 		}
 		return true;
 	}
+	private void shareWithFriend() {
+		// TODO Auto-generated method stub
+		Intent intent = new Intent(Intent.ACTION_SEND);
+
+		intent.setType("text/plain");
+		intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_title));
+		intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_content));
+		startActivity(Intent.createChooser(intent, getTitle()));
+	}
+	private void gotoStore(){
+		try{
+			startActivity(new Intent("android.intent.action.VIEW",
+					Uri.parse("market://details?id=com.benemind.voa")));
+		}
+		catch(ActivityNotFoundException e){
+			e.printStackTrace();
+			DialogUtils.showNoMarketApp(this);
+		}
+	}
+	private void openHelp() {
+		// TODO Auto-generated method stub
+		mSearchResult.loadUrl(buildUrl("help.html"));
+	}
+
+	private void openWebsite() {
+		// TODO Auto-generated method stub
+		Intent intent= new Intent();        
+		intent.setAction("android.intent.action.VIEW");    
+		Uri content_url = Uri.parse("http://aaronsh.github.io/ADict/");   
+		intent.setData(content_url);  
+		startActivity(intent);
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -236,7 +272,7 @@ public class XDictMainActivity extends SherlockActivity implements
 		mHttpServer = new TinyHttpServer(8083);
 		mHttpServer.addRequestHandler(this);
 		File RootFolder = FileUtils.getDictDir();
-		File HtmlFolder = new File(RootFolder, "html");
+		File HtmlFolder = RootFolder;
 		mHttpServer.setServerRoot(HtmlFolder);
 		mHttpServer.startServer();
 		while(mHttpServer.isStartingUp()){

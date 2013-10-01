@@ -1,0 +1,10 @@
+StarDict's dict ifo file
+version=2.4.2
+wordcount=
+idxfilesize=
+bookname=有道在线词典
+author=Sam Liu
+description=Youdao online dictionary, an example on adict plugin
+date=2013.10.01
+sametypesequence=m
+DictType=ADictPlugin

@@ -21,11 +21,14 @@
     <b>联系：<a href="mailto:rib.liu@qq.com?subject=ADict反馈意见">rib.liu@qq.com</a></b>  
     <br/>
     <br/>
-    <p><b>ADict</b>是一款免费、开源、具有近乎扩展潜力的电子辞典软件，此词典支持StartDict格式的离线词库及有道在线词典、qq在线词典，具有很快的离线和在线搜索速度。同时，此词典还支持用户自定义词典显示，</p>      
+    <p><b>ADict</b>是一款免费、开源、具有近乎无限扩展潜力的电子辞典软件，此词典<b>完美支持</b>多种StartDict格式的离线词库及有道在线词典、qq在线词典，具有很快的离线和在线搜索速度。同时，此词典还支持最大限度的定制化，给你一个完全属于自己的电子词典！</p>      
     <br/>
     <br/>
     <b>有任何建议或者反馈可以随时联系作者</b>   ]]>
 </Data></string>
 
-
+    <string name="share_title">优秀安卓软件分享</string>
+    <string name="share_content">《ADict》这款安卓软件非常棒。希望你也喜欢！</string>
+    <string name="market_no_app_msg">无法打开应用市场！</string>
+    <string name="market_no_app_ok">确定</string>
 </resources>

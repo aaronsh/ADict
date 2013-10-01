@@ -21,6 +21,9 @@ import com.benemind.adict.core.kingsoft.KingsoftDictHtmlBuilder;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
 
 public class DictEng {
@@ -53,13 +56,25 @@ public class DictEng {
 		mCntx = cntx;
 		mRootFolder = FileUtils.getDictDir();
 		mBookFolder = new File(mRootFolder, "books");
-		mHtmlFolder = new File(mRootFolder, "html");
+		mHtmlFolder = mRootFolder;
 		mActiveDicts = new LinkedList<Dictionary>();
 		
+		DefaultPlugIn.loadPlugins(cntx);
+		
 		final String PREF_KEY = "installed";
+		PackageManager pm = cntx.getPackageManager();//context为当前Activity上下文 
+		PackageInfo pi;
+		int verCode = 1;
+		try {
+			pi = pm.getPackageInfo(cntx.getPackageName(), 0);
+			verCode = pi.versionCode;
+		} catch (NameNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		SharedPreferences pref = cntx.getSharedPreferences("dict", Context.MODE_PRIVATE);
-		Boolean installed = pref.getBoolean(PREF_KEY, false);
-		if( !installed ){
+		int installed = pref.getInt(PREF_KEY, 0);
+		if( installed < verCode ){
 			if(!mHtmlFolder.exists()){
 				mHtmlFolder.mkdirs();
 			}
@@ -71,11 +86,18 @@ public class DictEng {
 			if(!imgFolder.exists()){
 				imgFolder.mkdirs();
 			}
-			File pluginsFolder = new File(mHtmlFolder, "plugins");
-			if(!pluginsFolder.exists()){
-				pluginsFolder.mkdirs();
+
+			
+			File onlineDictFolder = new File(mBookFolder, "qq_online");
+			if(!onlineDictFolder.exists()){
+				onlineDictFolder.mkdirs();
 			}
-			String[] files = {"html.csv","iciba.csv", "plugins.csv","dict.js",
+			onlineDictFolder = new File(mBookFolder, "youdao_online");
+			if(!onlineDictFolder.exists()){
+				onlineDictFolder.mkdirs();
+			}
+			
+			String[] files = {"html.csv","iciba.csv", "dict.js",
 							"img/background.png",
 							"img/close.png",
 							"img/dot_brown.png",
@@ -90,25 +112,19 @@ public class DictEng {
 							"img/up_brown.png",
 
 							"css/default.css",
-							"plugins/langdao-ec-gb.js",
-							"plugins/qq_online.js",
-							"plugins/stardict-kdic-ec-11w-2.4.2.js",
-							"plugins/stardict-langdao-ec-gb-2.4.2.js",
-							"plugins/stardict-lazyworm-ec-2.4.2.js",
-							"plugins/stardict-oxfordjm-ec-2.4.2.js",
-							"plugins/stardict-powerword2007_pwdecmc-2.4.2.css",
-							"plugins/stardict-powerword2007_pwdecmc-2.4.2.js",
-							"plugins/stardict-quick_eng-zh_CN-2.4.2.js",
-							"plugins/stardict-stardict1.3-2.4.2.js",
-							"plugins/stardict-xdict-ec-gb-2.4.2.js",
-							"plugins/youdao_online.js"			
+							"books/qq_online/qq_online.adict",
+							"books/qq_online/qq_online.ifo",
+							"books/qq_online/qq_online.js",
+							"books/youdao_online/youdao_online.adict",
+							"books/youdao_online/youdao_online.ifo",
+							"books/youdao_online/youdao_online.js"
 					};
 			for(String file:files){
 				installFile(file);
 			}
 			
 			SharedPreferences.Editor editor = pref.edit();
-			editor.putBoolean(PREF_KEY, true);
+			editor.putInt(PREF_KEY, verCode);
 			editor.commit();
 		}
 
@@ -118,7 +134,7 @@ public class DictEng {
 	public void reloadConfig()
 	{
 		DictHtmlBuilder.loadHtmlSections(mHtmlFolder);
-		DictHtmlBuilder.loadHtmlPlugins(mHtmlFolder);
+		DefaultPlugIn.loadPlugins(mCntx);
 		KingsoftDictHtmlBuilder.loadConvertParam(mHtmlFolder);
 	}
 
@@ -141,9 +157,7 @@ public class DictEng {
 			in.close();
 			out.close();
 		}catch(Exception e){   
-
 			e.printStackTrace();           
-
 		}   
 	}
 
@@ -218,16 +232,22 @@ public class DictEng {
 	public String lookupWord(String key) {
 		key = key.trim();
 		StringBuilder body = new StringBuilder();
-
+		
+		ArrayList<String> CssLinks = new ArrayList<String>();
 		Iterator<Dictionary> it = mActiveDicts.iterator();
 		while (it.hasNext()) {
 			Dictionary dict = it.next();
 			String text = dict.lookupWord(key);
 			if (text.length() > 0) {
-				body.append(DictHtmlBuilder.buildDictionary(text, dict));
+				String cssLink = dict.getCssLink();
+				if( cssLink != null ){
+					CssLinks.add(cssLink);
+				}
+				String jsText = dict.getJavascript();
+				body.append(DictHtmlBuilder.buildDictionary(text, getDictId(dict), jsText));
 			}
 		}
-		StringBuilder header = DictHtmlBuilder.buildHeader();
+		StringBuilder header = DictHtmlBuilder.buildHeader(CssLinks);
 		header.append(DictHtmlBuilder.buildBody(body.toString()));
 		StringBuilder html = DictHtmlBuilder.buildHtml(header.toString());
 		String htmlText = html.toString();
@@ -239,10 +259,7 @@ public class DictEng {
 		ArrayList<Dictionary> list = new ArrayList<Dictionary>();
 
 		ArrayList<Dictionary> onCardList = scanCard();
-		//add online dicts
-		onCardList.add(new OnlineDictionary("有道在线词典"));
-		onCardList.add(new OnlineDictionary("QQ在线词典"));
-		
+
 		ArrayList<Dictionary> savedList = loadDictList();
 		Iterator<Dictionary> itSaved = savedList.iterator();
 		while (itSaved.hasNext()) {
