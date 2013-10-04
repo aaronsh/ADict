@@ -169,8 +169,8 @@ public class DictEng {
 		if (onCardList.isEmpty()) {
 			retCode = NO_DICT_ON_CARD;
 		}
-		onCardList.add(new OnlineDictionary("有道在线词典"));
-		onCardList.add(new OnlineDictionary("QQ在线词典"));
+//		onCardList.add(new OnlineDictionary("有道在线词典"));
+//		onCardList.add(new OnlineDictionary("QQ在线词典"));
 
 		ArrayList<Dictionary> savedList = loadDictList();
 		if (!savedList.isEmpty()) {

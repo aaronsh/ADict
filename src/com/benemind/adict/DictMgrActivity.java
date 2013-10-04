@@ -111,7 +111,7 @@ public class DictMgrActivity extends SherlockListActivity  {
 	}
 
 	@Override
-	protected void onDestroy()
+	protected void onPause()
 	{
         ArrayList<Dictionary> dicts = mAdapter.getDataSource();
         DragSortListView list = getListView();;
@@ -135,7 +135,8 @@ public class DictMgrActivity extends SherlockListActivity  {
         }
         
         this.setResult(Activity.RESULT_OK, null);
-        super.onDestroy();
+        Log.v(TAG, "onPause");
+        super.onPause();
 	}
     @Override
     public DragSortListView getListView() {
