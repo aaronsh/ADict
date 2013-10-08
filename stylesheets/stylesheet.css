@@ -109,6 +109,9 @@ header h2 {
   max-width: 100%;
 }
 
+.screenshot{
+  border:solid 1px gray;
+}
 aside#sidebar {
   width: 200px;
   padding-left: 20px;
