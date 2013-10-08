@@ -128,6 +128,22 @@ aside#sidebar p.repo-owner a {
   margin-bottom: 40px;
 }
 
+header div.language{
+  width: 134px;
+  height: 58px;
+  line-height: 1.2;
+  font-size: 18px;
+  color: #fff;
+  padding-left: 68px;
+  padding-top: 22px;
+  font-family: 'Architects Daughter', 'Helvetica Neue', Helvetica, Arial, serif;
+  position: absolute;
+  right: 0;
+  top: 80px;
+}
+header div.language a{
+  color:#fff;
+}
 a.button {
   width: 134px;
   height: 58px;
@@ -423,6 +439,28 @@ footer a:hover {
   }
   header h2 {
     font-size: 24px;
+  }
+  header div.language{
+    background-image: none;
+    width: auto;
+    height: auto;
+    display: inline-block;
+    margin-top: 15px;
+    padding: 5px 10px;
+    position: relative;
+    text-align: center;
+    font-size: 13px;
+    line-height: 1;
+    background-color: #9ddcff;
+    color: #2879d0;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    top:0px;
+    float:right;
+  }
+  header div.language a{
+    color:#575757;
   }
   header a.button {
     background-image: none;
