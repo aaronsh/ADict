@@ -15,8 +15,29 @@
 
     <title>Adict by aaronsh</title>
     <script  type="text/javascript">
-      var AniFrame = [{ImgId:'img1',FrameIndex:0,Frames:['images/screenshot_1_1.png', 'images/screenshot_1_2.png']},
-        {ImgId:'img2',FrameIndex:0,Frames:['images/screenshot_1_1.png', 'images/screenshot_1_2.png']}];
+      var AniFrame = [{ImgId:'img1',FrameIndex:0,Frames:['images/screenshot_1_1.png','images/screenshot_1_2.png',
+        'images/screenshot_1_3.png','images/screenshot_1_4.png','images/screenshot_1_5.png','images/screenshot_1_6.png',
+        'images/screenshot_1_7.png','images/screenshot_1_8.png','images/screenshot_1_9.png','images/screenshot_1_10.png',
+        'images/screenshot_1_10.png','images/screenshot_1_10.png','images/screenshot_1_11.png','images/screenshot_1_11.png',
+        'images/screenshot_1_11.png','images/screenshot_1_12.png','images/screenshot_1_12.png','images/screenshot_1_12.png','images/screenshot_1_13.png',
+        'images/screenshot_1_13.png','images/screenshot_1_13.png','images/screenshot_1_13.png','images/screenshot_1_13.png']},
+        {ImgId:'img2',FrameIndex:0,Frames:[
+          'images/screenshot_2_1.png',
+          'images/screenshot_2_2.png',
+          'images/screenshot_2_3.png',
+          'images/screenshot_2_4.png',
+          'images/screenshot_2_5.png',
+          'images/screenshot_2_6.png',
+          'images/screenshot_2_7.png',
+          'images/screenshot_2_8.png',
+          'images/screenshot_2_9.png',
+          'images/screenshot_2_10.png',
+          'images/screenshot_2_11.png',
+          'images/screenshot_2_12.png',
+          'images/screenshot_2_13.png',
+          'images/screenshot_2_13.png',
+          'images/screenshot_2_13.png',
+          'images/screenshot_2_13.png']}];
       function updateAniFrame(){
         //console.log('updateAniFrame');
         //alert('updateAniFrame');
@@ -67,13 +88,13 @@
 词条解释页面简洁美观，操作便利；
             </li>
             <li>
-修正大部分词库中音标显示问题；完美音标显示；
+修正大部分词库中音标显示问题；完美音标呈现；
             </li>
             <li>
-极速查询；词库数量不再是查询瓶颈；
+极速查询；支持无限量词库；
             </li>
             <li>
-纯Java实现，支持多种CPU，再无硬件使用限制；
+纯Java编写，支持多种CPU，再无硬件设备限制；
             </li>
             <li>
 支持javascript扩展，支持深度定制；此软件在查询结果显示时采用web技术，您可以使用Javascript和css对查询结果进行充分定制，添加裁剪部分功能，修改UI显示，使之成为一款真正属于自己的电子词典；
@@ -83,14 +104,28 @@
 <a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>
 软件截屏
           </h3>
-<p><img id='img1' src='images/screenshot_1_1.png' class="screenshot"></img>
-  <img id='img2' src='images/screenshot_1_1.png' class="screenshot"></img>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+            <p>
+              <table border="0">
+                <tr><td>单词查询</td><td>词库管理</td></tr>
+                <tr>
+                  <td><img id='img1' src='images/screenshot_1_1.png' class="screenshot"></img></td>
+                  <td><img id='img2' src='images/screenshot_1_1.png' class="screenshot"></img></td>
+                </tr>
+              </table>
+            </p>
           <h3>
 <a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>
 软件由来
           </h3>
             <p>
-我在开发《逆向巧学VOA》软件的时候，我希望能够找到一款能够方便用户对单词进行详细查询的电子词典。我先后试过多款电子词典，最终却失望的发现这些均不能满足我的要求。有的要求用户先在词典中进行设置；有的只能弹出一个简单翻译窗口，而且关闭按钮小小的，对用户来说很难关闭；有的则是音标显示错误，及时找到所谓的音标完美版；如果能有一款真正好用而且可以定制的电子词典多好！基于此，我决定开发一款电子词典软件并贡献出来。这款软件应该具有如下特点：免费、开源、采用常见离线词库、单词查询速度理想、可扩展性好。有了这个想法后，我重新用Java实现了高效查找算法，并结合Web前段技术，在经历了3个多月的辛苦工作后（这些都是我的业余时间，呵呵），ADict终于可以和诸位见面了。希望诸位喜欢并参与进来！
+我在开发《逆向巧学VOA》软件的时候，我希望能够找到一款能够方便用户对单词进行详细查询的电子词典。在先后试过多款电子词典后，我最终却失望的发现这些均不能满足我的要求。
+            </p>
+            <p>
+有的要求用户先在词典中进行设置；有的只能弹出一个简单翻译窗口，而且关闭按钮小小的，对用户来说很难关闭；有的则是音标显示错误，即使所谓的音标完美版；
+            </p><p>
+如果能有一款真正好用而且可以定制的电子词典多好！
+            </p><p>
+基于此，我决定开发一款电子词典软件并贡献出来。这款软件应该具有如下特点：免费、开源、采用常见离线词库、单词查询速度理想、可扩展性好。这就是ADict，——A dictionary on Android。希望诸位喜欢这款软件并且参与这个开源项目的开发！
             </p>
           <h3>
 <a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>
@@ -104,29 +139,33 @@ ADict之理想
 加入Adict开发队伍
           </h3>
             <p>
-首先感谢您来到ADict网站！这个项目目前由我个人维护开发。我希望能有更多的人参与进来！这个项目目前需要下列开发人员：Web前端开发人员、UI开发人员、Android开发人员、软件测试人员。如果您有兴趣参加这个项目，请给我发Email。我会很高兴您的参与。您也可以将软件使用过程中的问题和建议通过Email发给我。您的任何Email对这个项目都是宝贵的。
+首先感谢您来到ADict网站！
+            </p><p>
+这个项目目前由我个人维护开发。我希望能有更多的人参与进来！这个项目目前需要下列开发人员：Web前端开发人员、UI开发人员、Android开发人员、软件测试人员。如果您有兴趣参与这个项目，请给我发Email。我会很期待您的参与。
+            </p><p>
+您也可以将软件使用过程中的问题和建议通过Email发给我。您的问题和建议也是参与项目的一种形式，对这个项目也是非常宝贵的。
             </p>
           <h3>
 <a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>
 作者
           </h3>
-
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
-
+            <p>
+作者具有多年的软件开发经验，精通C、C++、Java、Python、PHP、Javascript等多门语言，精通Android软件开发、PHP网站开发。作者目前从事android自动化测试的研究。
+            </p>
           <h3>
 <a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>
 联系我
           </h3>
-
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Thanks</h3>
-
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+            <p><a href="mailto:rib.liu@qq.com">rib.liu@qq.com</a></p>
+          <h3>
+            <a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>感谢
+          </h3>
+            <p>感谢下列开源项目及开发人员！</p>
+            <p><a href="http://zhanweiwu.github.io/">芒果词典</a><br/><a href="http://zhanweiwu.github.io/">芒果词典</a><br/>
+            </p>
         </section>
 
         <aside id="sidebar">
-          <p class="repo-owner"><a href="/index_zh-CN.html">Chinese</a></p>
           <a href="https://github.com/aaronsh/ADict/zipball/master" class="button">
             <small>Download</small>
             .zip file
@@ -137,8 +176,9 @@ ADict之理想
           </a>
 
           <p class="repo-owner"><a href="https://github.com/aaronsh/ADict"></a> is maintained by <a href="https://github.com/aaronsh">aaronsh</a>.</p>
-
+<!--
           <p>This page was generated by <a href="pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+-->
         </aside>
       </div>
     </div>
