@@ -20,7 +20,7 @@
         'images/screenshot_1_7.jpg','images/screenshot_1_8.jpg','images/screenshot_1_9.jpg','images/screenshot_1_10.jpg',
         'images/screenshot_1_10.jpg','images/screenshot_1_10.jpg','images/screenshot_1_11.jpg','images/screenshot_1_11.jpg',
         'images/screenshot_1_11.jpg','images/screenshot_1_12.jpg','images/screenshot_1_12.jpg','images/screenshot_1_12.jpg','images/screenshot_1_13.jpg',
-        'images/screenshot_1_13.jpg','images/screenshot_1_13.jpg','images/screenshot_1_13.jpg','images/screenshot_1_13.jpg']},
+        'images/screenshot_1_13.jpg','images/screenshot_1_13.jpg','images/screenshot.jpg','images/screenshot.jpg']},
         {ImgId:'img2',FrameIndex:0,Frames:[
           'images/screenshot_2_1.jpg',
           'images/screenshot_2_2.jpg',
@@ -36,8 +36,8 @@
           'images/screenshot_2_12.jpg',
           'images/screenshot_2_13.jpg',
           'images/screenshot_2_13.jpg',
-          'images/screenshot_2_13.jpg',
-          'images/screenshot_2_13.jpg']}];
+          'images/screenshot.jpg',
+          'images/screenshot.jpg']}];
       function updateAniFrame(){
         //console.log('updateAniFrame');
         //alert('updateAniFrame');
@@ -53,10 +53,10 @@
           }
           Frame.FrameIndex = index;
         }
-        setTimeout(updateAniFrame, 500)
+        setTimeout(updateAniFrame, 800)
       }
       onload = function(){
-        setTimeout(updateAniFrame,500);
+        setTimeout(updateAniFrame,800);
       }
     </script>
   </head>
@@ -108,8 +108,8 @@
               <table border="0">
                 <tr><td>单词查询</td><td>词库管理</td></tr>
                 <tr>
-                  <td><img id='img1' src='images/screenshot_1_1.jpg' class="screenshot"></img></td>
-                  <td><img id='img2' src='images/screenshot_1_1.jpg' class="screenshot"></img></td>
+                  <td><img id='img1' src='images/screenshot_1_1.jpg' class="screenshot" witdh="240" height="407"></img></td>
+                  <td><img id='img2' src='images/screenshot_2_1.jpg' class="screenshot" witdh="240" height="407"></img></td>
                 </tr>
               </table>
             </p>
