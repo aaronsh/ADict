@@ -56,6 +56,23 @@
         setTimeout(updateAniFrame, 800)
       }
       onload = function(){
+        box = document.getElementById("screen_shots");
+        screenTbl = document.getElementById('screen_shot');
+        ani1= box.firstElementChild;
+        ani2 = ani1.nextElementSibling;
+        boxRect = box.getClientRects()[0];
+        tblRect = screenTbl.getClientRects()[0];
+        if( tblRect.width*2 <= boxRect.width ){
+          w =boxRect.width/2 + 'px';
+          ani1.style.width = w;
+          ani2.style.width = w;
+          ani1.style.float="left";
+          ani2.style.marginLeft=w;
+          //ani2.style.float="right";
+        }
+        else{
+          ani1.style.float="";
+        }
         setTimeout(updateAniFrame,800);
       }
     </script>
@@ -105,13 +122,24 @@ Features
 Screen shots
           </h3>
             <p>
-              <table border="0">
-                <tr><td>单词查询</td><td>词库管理</td></tr>
-                <tr>
-                  <td><img id='img1' src='images/screenshot_1_1.jpg' class="screenshot" witdh="240" height="407"></img></td>
-                  <td><img id='img2' src='images/screenshot_2_1.jpg' class="screenshot" witdh="240" height="407"></img></td>
-                </tr>
-              </table>
+              <div id="screen_shots">
+                <div style="float:left">
+                  <table border="0" id="screen_shot">
+                    <tr><td>单词查询</td></tr>
+                    <tr>
+                      <td><img id='img1' src='images/screenshot_1_1.jpg' class="screenshot" witdh="240" height="407"></img></td>
+                    </tr>
+                  </table>
+                </div>
+                <div>
+                  <table border="0" >
+                    <tr><td>词库管理</td></tr>
+                    <tr>
+                      <td><img id='img2' src='images/screenshot_2_1.jpg' class="screenshot" witdh="240" height="407"></img></td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
             </p>
           <h3>
 <a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>
@@ -141,7 +169,7 @@ Join us
             <p>
 首先感谢您来到ADict网站！
             </p><p>
-这个项目目前由我个人维护开发。我希望能有更多的人参与进来！这个项目目前需要下列开发人员：Web前端开发人员、UI开发人员、Android开发人员、软件测试人员。如果您有兴趣参与这个项目，请给我发Email。我会很期待您的参与。
+如果您对这个项目感兴趣，想成为ADict开发者中的一员，请给我发Email。我很期待您的参与。
             </p><p>
 您也可以将软件使用过程中的问题和建议通过Email发给我。您的问题和建议也是参与项目的一种形式，对这个项目也是非常宝贵的。
             </p>
@@ -150,7 +178,7 @@ Join us
 About me
           </h3>
             <p>
-作者具有多年的软件开发经验，精通C、C++、Java、Python、PHP、Javascript等多门语言，精通Android软件开发、PHP网站开发。作者目前从事android自动化测试的研究。
+作者是资深软件工程师，精通C、C++、Java、Python、PHP、Javascript等多种语言，参与带领过多个软件开发项目，包括Android软件开发、PHP网站开发等。作者目前从事android自动化测试的研究。
             </p>
           <h3>
 <a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>
@@ -166,6 +194,9 @@ Contact me
         </section>
 
         <aside id="sidebar">
+          <a href="./help_zh-CN.html"  class="HelpButton">
+            Help
+          </a>
           <a href="https://github.com/aaronsh/ADict/zipball/master" class="button">
             <small>Download</small>
             .zip file
