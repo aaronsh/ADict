@@ -182,12 +182,12 @@ public class XDictMainActivity extends SherlockActivity implements
 	public boolean onCreateOptionsMenu(Menu menu) {
 
 		MenuItem refreshItem = menu.add(0, MENU_ID_DICT_MGR, Menu.NONE,
-				R.string.menu_refresh);
+				R.string.menu_dict_mngr);
 		refreshItem.setIcon(R.drawable.ic_menu_books);
 		refreshItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
 
-		SubMenu subMenu2 = menu.addSubMenu("Main menu");
+		SubMenu subMenu2 = menu.addSubMenu(R.string.menu_more);
 		subMenu2.add(1, MENU_ID_WEBSITE, Menu.NONE, R.string.menu_website);
 		subMenu2.add(1, MENU_ID_HELP, Menu.NONE, R.string.menu_help);
 //		subMenu2.add(1, MENU_ID_APP_STORE, Menu.NONE, R.string.menu_app_store);

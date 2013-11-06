@@ -5,30 +5,32 @@
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_refresh">Refresh</string>
-    <string name="about_ok">确定</string>
-    <string name="menu_help">帮助</string>
-    <string name="menu_about">关于</string>
-    <string name="menu_app_store">应用市场</string>
-    <string name="menu_share">分享</string>
-    <string name="menu_website">网站</string>
-    <string name="loading_dictionaries">正在装载词典，请稍后……</string>
-    <string name="acra_report">软件发生异常，正在提交异常报告</string>
+    <string name="menu_dict_mngr">Dictionaries</string>
+    <string name="menu_more">More</string>
+    <string name="about_ok">OK</string>
+    <string name="menu_help">Help</string>
+    <string name="menu_about">About</string>
+    <string name="menu_app_store">App Store</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_website">Website</string>
+    <string name="loading_dictionaries">loading dictionaries, please wait...</string>
+    <string name="acra_report">Submitting exception...</string>
     <string name="about_text"><Data>
 <![CDATA[  
-    <b>作者: 西红柿真好吃</b>  
+    <b>Author: Sam Liu</b>  
     <br/>   
     <br/>
-    <b>联系：<a href="mailto:rib.liu@qq.com?subject=ADict反馈意见">rib.liu@qq.com</a></b>  
+    <b>Mail to:<a href="mailto:rib.liu@qq.com?subject=ADict feedback">rib.liu@qq.com</a></b>  
     <br/>
     <br/>
-    <p><b>ADict</b>是一款免费、开源、具有近乎无限扩展潜力的电子辞典软件，此词典<b>完美支持</b>多种StartDict格式的离线词库及有道在线词典、qq在线词典，具有很快的离线和在线搜索速度。同时，此词典还支持最大限度的定制化，给你一个完全属于自己的电子词典！</p>      
+    <p><b>ADict</b> is the implementation of StarDict on Android in pure java with excellent performance, enjoyable UI and high scalability. You can customize it as what you want!</p>      
     <br/>
     <br/>
-    <b>有任何建议或者反馈可以随时联系作者</b>   ]]>
+    <b>Please contact with me freely if you have any question about it</b>   ]]>
 </Data></string>
 
-    <string name="share_title">优秀安卓软件分享</string>
-    <string name="share_content">《ADict》这款安卓软件非常棒。希望你也喜欢！</string>
-    <string name="market_no_app_msg">无法打开应用市场！</string>
-    <string name="market_no_app_ok">确定</string>
+    <string name="share_title">Share a good app with you</string>
+    <string name="share_content">ADict is an exceelent dictionary, enjoy it!</string>
+    <string name="market_no_app_msg">Can not open App Store</string>
+    <string name="market_no_app_ok">Ok</string>
 </resources>
