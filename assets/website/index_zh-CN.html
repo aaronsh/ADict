@@ -1,0 +1,219 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Adict by aaronsh</title>
+    <script  type="text/javascript">
+      var AniFrame = [{ImgId:'img1',FrameIndex:0,Frames:['images/screenshot_1_1.jpg','images/screenshot_1_2.jpg',
+        'images/screenshot_1_3.jpg','images/screenshot_1_4.jpg','images/screenshot_1_5.jpg','images/screenshot_1_6.jpg',
+        'images/screenshot_1_7.jpg','images/screenshot_1_8.jpg','images/screenshot_1_9.jpg','images/screenshot_1_10.jpg',
+        'images/screenshot_1_10.jpg','images/screenshot_1_10.jpg','images/screenshot_1_11.jpg','images/screenshot_1_11.jpg',
+        'images/screenshot_1_11.jpg','images/screenshot_1_12.jpg','images/screenshot_1_12.jpg','images/screenshot_1_12.jpg','images/screenshot_1_13.jpg',
+        'images/screenshot_1_13.jpg','images/screenshot_1_13.jpg','images/screenshot.jpg','images/screenshot.jpg']},
+        {ImgId:'img2',FrameIndex:0,Frames:[
+          'images/screenshot_2_1.jpg',
+          'images/screenshot_2_2.jpg',
+          'images/screenshot_2_3.jpg',
+          'images/screenshot_2_4.jpg',
+          'images/screenshot_2_5.jpg',
+          'images/screenshot_2_6.jpg',
+          'images/screenshot_2_7.jpg',
+          'images/screenshot_2_8.jpg',
+          'images/screenshot_2_9.jpg',
+          'images/screenshot_2_10.jpg',
+          'images/screenshot_2_11.jpg',
+          'images/screenshot_2_12.jpg',
+          'images/screenshot_2_13.jpg',
+          'images/screenshot_2_13.jpg',
+          'images/screenshot.jpg',
+          'images/screenshot.jpg']}];
+      function updateAniFrame(){
+        //console.log('updateAniFrame');
+        //alert('updateAniFrame');
+        for(var i=0;i<AniFrame.length;i++){
+          var Frame = AniFrame[i];
+          var index = Frame.FrameIndex+1;
+          if( index >= Frame.Frames.length){
+            index = 0;
+          }
+          var e = document.getElementById(Frame.ImgId);
+          if(e.getAttribute('src') != Frame.Frames[index] ){
+            e.setAttribute('src', Frame.Frames[index]);
+          }
+          Frame.FrameIndex = index;
+        }
+        setTimeout(updateAniFrame, 800)
+      }
+      onload = function(){
+        box = document.getElementById("screen_shots");
+        screenTbl = document.getElementById('screen_shot');
+        ani1= box.firstElementChild;
+        ani2 = ani1.nextElementSibling;
+        boxRect = box.getClientRects()[0];
+        tblRect = screenTbl.getClientRects()[0];
+        if( tblRect.width*2 <= boxRect.width ){
+          w =boxRect.width/2 + 'px';
+          ani1.style.width = w;
+          ani2.style.width = w;
+          ani1.style.float="left";
+          ani2.style.marginLeft=w;
+          //ani2.style.float="right";
+        }
+        else{
+          ani1.style.float="";
+        }
+        setTimeout(updateAniFrame,800);
+      }
+    </script>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Adict</h1>
+        <h2>The implementation of StarDict on Android in pure java with excellent performance, enjoyable UI and high scalability</h2>
+        <div class="language">
+          <a href="./index.html">English</a>
+        </div>
+        <a href="https://github.com/aaronsh/ADict" class="button"><small>View project on</small>GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h3>
+<a name="welcome-to-adict-pages" class="anchor" href="#welcome-to-adict-pages"><span class="octicon octicon-link"></span></a>
+软件特性
+          </h3>
+          <ul>
+            <li>
+能使用电脑字典软件StarDict的字典库，包括牛津现代英汉双解词典、朗道英汉字典，可提供详尽字词解释、词性、例句等，比起翻字典方便得多；
+            </li>
+            <li>
+词条解释页面简洁美观，操作便利；
+            </li>
+            <li>
+修正大部分词库中音标显示问题；完美音标呈现；
+            </li>
+            <li>
+极速查询；支持无限量词库；
+            </li>
+            <li>
+纯Java编写，支持多种CPU，再无硬件设备限制；
+            </li>
+            <li>
+支持javascript扩展，支持深度定制；此软件在查询结果显示时采用web技术，您可以使用Javascript和css对查询结果进行充分定制，添加裁剪部分功能，修改UI显示，使之成为一款真正属于自己的电子词典；
+            </li>
+          </ul>
+          <h3>
+<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>
+软件截屏
+          </h3>
+            <p>
+              <div id="screen_shots">
+                <div style="float:left">
+                  <table border="0" id="screen_shot">
+                    <tr><td>单词查询</td></tr>
+                    <tr>
+                      <td><img id='img1' src='images/screenshot_1_1.jpg' class="screenshot" witdh="240" height="407"></img></td>
+                    </tr>
+                  </table>
+                </div>
+                <div>
+                  <table border="0" >
+                    <tr><td>词库管理</td></tr>
+                    <tr>
+                      <td><img id='img2' src='images/screenshot_2_1.jpg' class="screenshot" witdh="240" height="407"></img></td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </p>
+          <h3>
+<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>
+软件由来
+          </h3>
+            <p>
+我在开发《逆向巧学VOA》软件的时候，我希望能够找到一款能够方便用户对单词进行详细查询的电子词典。在先后试过多款电子词典后，我最终却失望的发现这些均不能满足我的要求。
+            </p>
+            <p>
+有的要求用户先在词典中进行设置；有的只能弹出一个简单翻译窗口，而且关闭按钮小小的，对用户来说很难关闭；有的则是音标显示错误，即使所谓的音标完美版；
+            </p><p>
+如果能有一款真正好用而且可以定制的电子词典多好！
+            </p><p>
+基于此，我决定开发一款电子词典软件并贡献出来。这款软件应该具有如下特点：免费、开源、采用常见离线词库、单词查询速度理想、可扩展性好。这就是ADict，——A dictionary on Android。希望诸位喜欢这款软件并且参与这个开源项目的开发！
+            </p>
+          <h3>
+<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>
+ADict之理想
+          </h3>
+            <p>
+希望ADict能够成为Android开源软件中一款代表软件，能够代表中国开源软件力量。
+            </p>
+          <h3>
+<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>
+加入Adict开发队伍
+          </h3>
+            <p>
+首先感谢您来到ADict网站！
+            </p><p>
+如果您对这个项目感兴趣，想成为ADict开发者中的一员，请给我发Email。我很期待您的参与。
+            </p><p>
+您也可以将软件使用过程中的问题和建议通过Email发给我。您的问题和建议也是参与项目的一种形式，对这个项目也是非常宝贵的。
+            </p>
+          <h3>
+<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>
+作者
+          </h3>
+            <p>
+作者是资深软件工程师，精通C、C++、Java、Python、PHP、Javascript等多种语言，参与带领过多个软件开发项目，包括Android软件开发、PHP网站开发等。作者目前从事android自动化测试的研究。
+            </p>
+          <h3>
+<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>
+联系我
+          </h3>
+            <p><a href="mailto:rib.liu@qq.com">rib.liu@qq.com</a></p>
+          <h3>
+            <a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>感谢
+          </h3>
+            <p>感谢下列开源项目及开发人员！</p>
+            <p><a href="http://zhanweiwu.github.io/">芒果词典</a><br/><a href="https://code.google.com/p/toolkits/wiki/YAStarDict">YAStarDict</a><br/>
+            </p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="./help_zh-CN.html"  class="HelpButton">
+            使用帮助
+          </a>
+          <a href="https://github.com/aaronsh/ADict/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/aaronsh/ADict/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/aaronsh/ADict"></a> is maintained by <a href="https://github.com/aaronsh">aaronsh</a>.</p>
+<!--
+          <p>This page was generated by <a href="pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+-->
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>

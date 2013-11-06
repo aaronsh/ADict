@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='stylesheets/font.css' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Adict by aaronsh</title>
+    <script  type="text/javascript">
+      var AniFrame = [{ImgId:'img1',FrameIndex:0,Frames:['images/screenshot_1_1.jpg','images/screenshot_1_1.jpg','images/screenshot_1_2.jpg',
+        'images/screenshot_1_3.jpg','images/screenshot_1_4.jpg','images/screenshot_1_5.jpg','images/screenshot_1_6.jpg',
+        'images/screenshot_1_7.jpg','images/screenshot_1_8.jpg','images/screenshot_1_9.jpg','images/screenshot_1_10.jpg',
+        'images/screenshot_1_10.jpg','images/screenshot_1_10.jpg','images/screenshot_1_11.jpg','images/screenshot_1_11.jpg',
+        'images/screenshot_1_11.jpg','images/screenshot_1_12.jpg','images/screenshot_1_12.jpg','images/screenshot_1_12.jpg','images/screenshot_1_13.jpg',
+        'images/screenshot_1_13.jpg','images/screenshot_1_13.jpg','0']},
+        {ImgId:'img2',FrameIndex:0,Frames:[
+          'images/screenshot_2_1.jpg',
+          'images/screenshot_2_2.jpg',
+          'images/screenshot_2_3.jpg',
+          'images/screenshot_2_4.jpg',
+          'images/screenshot_2_5.jpg',
+          'images/screenshot_2_6.jpg',
+          'images/screenshot_2_7.jpg',
+          'images/screenshot_2_8.jpg',
+          'images/screenshot_2_9.jpg',
+          'images/screenshot_2_10.jpg',
+          'images/screenshot_2_11.jpg',
+          'images/screenshot_2_12.jpg',
+          'images/screenshot_2_13.jpg',
+          'images/screenshot_2_13.jpg',
+          'images/screenshot_2_13.jpg',
+          'images/screenshot_2_13.jpg']},
+        {ImgId:'img0',FrameIndex:0,Frames:['images/add_dict_0.jpg','images/add_dict_0.jpg','images/add_dict_1.jpg',
+          'images/add_dict_2.jpg','images/add_dict_3.jpg','images/add_dict_4.jpg','images/add_dict_4.jpg','']}];
+      function updateAniFrame(){
+        //console.log('updateAniFrame');
+        //alert('updateAniFrame');
+        for(var i=0;i<AniFrame.length;i++){
+          var Frame = AniFrame[i];
+          var index = Frame.FrameIndex+1;
+          if( index >= Frame.Frames.length){
+            index = 0;
+          }
+          var e = document.getElementById(Frame.ImgId);
+          if(e.getAttribute('src') != Frame.Frames[index] ){
+            e.setAttribute('src', Frame.Frames[index]);
+          }
+          Frame.FrameIndex = index;
+        }
+        setTimeout(updateAniFrame, 800)
+      }
+      onload = function(){
+        setTimeout(updateAniFrame,800);
+      }
+    </script>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Adict</h1>
+        <h2>The implementation of StarDict on Android in pure java with excellent performance, enjoyable UI and high scalability</h2>
+        <div class="language">
+          <a href="./index.html">English</a>
+        </div>
+        <a href="https://github.com/aaronsh/ADict" class="button"><small>View project on</small>GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h3>
+<a name="welcome-to-adict-pages" class="anchor" href="#welcome-to-adict-pages"><span class="octicon octicon-link"></span></a>
+基本功能
+          </h3>
+          <ol>
+            <li>
+              字典安装<p>将StartDict字典文件解压到手机SD卡中的/adict/books文件夹中,然后重启ADict即可。通常将StartDict字典文件解压后会得到与字典名称对应的文件夹，而且文件夹中有扩展名为ifo、idx、dict或dict.gz的文件。</p>
+              <table border="0">
+                <tr>
+                  <td><img id='img0' src='images/add_dict_0.jpg' class="screenshot" width="645" height="371"></img></td>
+                </tr>
+              </table>
+            </li>
+            <li>
+              单词查询<p>在单词查询框中输入要查询的单词，然后点击“查询”按钮或点击下拉单词列表中的单词项即可。在当前的查询结果中，用户也可以点击词典右侧的“<img src="images/expand.png"></img>”或词条左侧的“<img src="images/line_blue.png"></img>”实现对词典或词条的隐藏。</p>
+              <table border="0">
+                <tr>
+                  <td><img id='img1' src='images/screenshot_1_1.jpg' class="screenshot"></img></td>
+                </tr>
+              </table>
+            </li>
+          </ol>
+          <h3>
+<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>
+高级功能
+          </h3>
+          <ol>
+            <li>激活/禁用词典<p>打开ADict，点击右上角的字典管理图标进入字典管理页面。在字典管理页面下，点击字典右侧的选择框即可激活/禁用选中的词典。</p></li>
+            <li>设置词典优先顺序<p>在字典管理页面下，按住词典左侧的图标可在词典列表中拖动所选中的词典。当词典被拖动至合适位置时，松开手指将词典放下。今后ADict在进行词典查询时就按照此列表中的词典顺序进行查询显示。</p></li>
+          </ol>
+            <p>
+              <table border="0">
+                <tr>
+                  <td><img id='img2' src='images/screenshot_2_1.jpg' class="screenshot"></img></td>
+                </tr>
+              </table>
+            </p>
+          <h3>
+<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>
+进阶扩展
+          </h3>
+          <ol>
+            <li>样式自定义<p>每次查询完毕，ADict均会在SDCARD上的ADict文件夹下产生index.html文件。用户可以通过调整修改index.html相关的stylesheet文件及javascript文件实现对查询结果及样式的修改。</p></li>
+            <li>功能扩展<p>请参考QQ在线词典的实现。QQ在线词典的全部实现文件都在ADict文件夹下的books/qq_online目录下。</p></li>
+          </ol>
+
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/aaronsh/ADict/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/aaronsh/ADict/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/aaronsh/ADict"></a> is maintained by <a href="https://github.com/aaronsh">aaronsh</a>.</p>
+<!--
+          <p>This page was generated by <a href="pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+-->
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>

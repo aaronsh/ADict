@@ -251,7 +251,12 @@ public class XDictMainActivity extends SherlockActivity implements
 	}
 	private void openHelp() {
 		// TODO Auto-generated method stub
-		mSearchResult.loadUrl(buildUrl("help.html"));
+		mSearchResult.loadUrl("file:///android_asset/website/help_zh-CN.html");
+		//loadUrl(buildUrl("help.html"));
+		InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+		inputMethodManager.hideSoftInputFromWindow(
+				mSearchInput.getWindowToken(),
+				InputMethodManager.HIDE_NOT_ALWAYS);		
 	}
 
 	private void openWebsite() {
