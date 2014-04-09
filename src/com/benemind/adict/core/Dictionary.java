@@ -2,6 +2,7 @@ package com.benemind.adict.core;
 
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -34,7 +35,7 @@ public class Dictionary {
 	protected boolean mLoaded;
 	
 	private String mJavascriptText;
-	private String mCssLink;
+	private String mCssText;
 	private String mListWebApi;
 	
 	private long mDictManagementID;
@@ -50,9 +51,8 @@ public class Dictionary {
 		mLoaded = false;
 		mDictManagementID = 0;
 		
-		mJavascriptText = null;
-		mCssLink = null;
-		mListWebApi = null;
+		mJavascriptText = "";
+		mCssText = "";
 	}
 
 	
@@ -64,7 +64,9 @@ public class Dictionary {
 	}
 
 
-
+	protected String getDictPath(){
+		return DictPath;
+	}
 	public String getBookName() {
 		return BookName;
 	}
@@ -199,38 +201,26 @@ public class Dictionary {
 		String BookName = FileInfo.getValue(IfoFile.KEY_BOOKNAME);
 		
 		String ListWebApi = null;
-		String JavascriptText = null;
-		String CssLink = null;
+		String JavascriptText = "";
+		String CssText = null;
 		
 		String wordCount = FileInfo.getValue(IfoFile.KEY_wordcount);
 		String indexFileSize = FileInfo.getValue(IfoFile.KEY_idxfilesize);
-		//load plugin form table
-		DefaultPlugIn plugin = DefaultPlugIn.findMatchPluagIn(BookName, wordCount, indexFileSize);
-		if( plugin != null ){
-			ListWebApi = null;
-			JavascriptText = plugin.get(DefaultPlugIn.Field.JavaScript);
-			CssLink = null;
+		//load css and js
+		file = new File(dir, dictName+".css");
+		CssText = readFromSd(file);
+		file = new File(dir, dictName+".js");
+		if( file.exists() ){
+			JavascriptText = readFromSd(file);
 		}
-		//load 'Adict' file
-		file = new File(dir, dictName+".adict");
-		if( file.exists() && file.isFile() ){
-			ADictFile adict = new ADictFile(file);
-			String s = adict.getValue(ADictFile.KEY_LIST_URL);
-			if( s!=null && s.length() > 0 ){
-				ListWebApi = s;
-			}
-			
-			JavascriptText = adict.getJs(dir);
-			s = adict.getValue(ADictFile.KEY_CSS);
-			if( s!=null && s.length() > 0 ){
-				StringBuilder sb = new StringBuilder();
-				sb.append("books/");
-				sb.append(dictPath);
-				sb.append("/");
-				sb.append(s);
-				CssLink = s.toString();
+		else{
+			//load plugin form table
+			DefaultPlugIn plugin = DefaultPlugIn.findMatchPluagIn(BookName, wordCount, indexFileSize);
+			if( plugin != null ){
+				JavascriptText = plugin.get(DefaultPlugIn.Field.JavaScript);
 			}
 		}
+		
 		
 		if( wordCount == null || wordCount.length() == 0 || indexFileSize == null || indexFileSize.length() == 0 ){
 			dict =  new OnlineDictionary(BookName);
@@ -239,7 +229,7 @@ public class Dictionary {
 			dict.mLoaded = true;
 			dict.mFileInfo = FileInfo;
 			dict.mJavascriptText = JavascriptText;
-			dict.mCssLink = CssLink;
+			dict.mCssText = CssText;
 			dict.mListWebApi = ListWebApi;
 			return dict;
 		}
@@ -289,7 +279,7 @@ public class Dictionary {
 		dict.mFileIndex = FileIndex;
 		dict.mFileDict = FileDict;
 		dict.mJavascriptText = JavascriptText;
-		dict.mCssLink = CssLink;
+		dict.mCssText = CssText;
 		dict.mListWebApi = ListWebApi;
 		return dict;
 	}
@@ -396,14 +386,33 @@ public class Dictionary {
 	}
 
 
-	public String getCssLink() {
+	public String getCss() {
 		// TODO Auto-generated method stub
-		return mCssLink;
+		return mCssText;
 	}
 
 
 	public String getJavascript() {
 		// TODO Auto-generated method stub
 		return mJavascriptText;
+	}
+	
+	private static String readFromSd(File file) {
+		try{
+			FileInputStream fin = new FileInputStream(file);   
+
+			int length = fin.available();   
+
+			byte [] buffer = new byte[length];
+			fin.read(buffer);
+			String s = new String(buffer);
+			fin.close();
+			return s;
+		}
+
+		catch(Exception e){   
+			e.printStackTrace();   
+		}   
+		return "";
 	}
 }

@@ -33,7 +33,11 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EncodingUtils;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
@@ -74,6 +78,7 @@ import com.benemind.util.FileUtils;
 import com.benemind.adict.core.DictConsts;
 import com.benemind.adict.core.DictEng;
 import com.benemind.adict.core.NotFoundDictException;
+import com.benemind.adict.core.WordLookupResult;
 import com.benemind.httpd.HttpTempFile;
 import com.benemind.httpd.TinyHttpRequestHandler;
 import com.benemind.httpd.TinyHttpResponse;
@@ -116,6 +121,8 @@ public class XDictMainActivity extends SherlockActivity implements
 	boolean mListWordTaskRunning;
 	String mPenddingListWordTask;
 	String mIndexHtmlContent = "";
+	
+	ArrayList<WordLookupResult> mWordLookupResults;
 
 	private ProgressDialog mWaitingDlg;
 	private final Handler mHandler = new Handler() {
@@ -256,7 +263,7 @@ public class XDictMainActivity extends SherlockActivity implements
 		InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 		inputMethodManager.hideSoftInputFromWindow(
 				mSearchInput.getWindowToken(),
-				InputMethodManager.HIDE_NOT_ALWAYS);		
+				InputMethodManager.HIDE_IMPLICIT_ONLY);		
 	}
 
 	private void openWebsite() {
@@ -268,12 +275,14 @@ public class XDictMainActivity extends SherlockActivity implements
 		startActivity(intent);
 	}
 
+	@SuppressLint("JavascriptInterface")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// setTheme(SampleList.THEME); //Used for theme switching in samples
-
 		super.onCreate(savedInstanceState);
 		Log.v(TAG, "onCreate");
+		mWordLookupResults = null;
+		
 		mHttpServer = new TinyHttpServer(8083);
 		mHttpServer.addRequestHandler(this);
 		File RootFolder = FileUtils.getDictDir();
@@ -305,16 +314,17 @@ public class XDictMainActivity extends SherlockActivity implements
 		mSearchResult = (WebView) findViewById(R.id.search_result);
 		WebSettings webSettings = mSearchResult.getSettings();
 		webSettings.setJavaScriptEnabled(true);
-		//webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+		webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
 
 		WebViewClient webClient = new DictWebViewClient();
 		mSearchResult.setWebViewClient(webClient);
 		ChromeClient chromeClient = new ChromeClient();
 		mSearchResult.setWebChromeClient(chromeClient);
+		mSearchResult.addJavascriptInterface(this, "adict");
 		//mSearchResult.reload();
 		
 
-		mSearchResult.loadUrl(buildUrl("welcome.html"));
+		mSearchResult.loadUrl("file:///android_asset/website/index.html");
 		
 		
 		mListWordTaskRunning = false;
@@ -329,6 +339,51 @@ public class XDictMainActivity extends SherlockActivity implements
 		mIndexHtmlContent = "";
 
 	}
+	public String getDictionaries(){
+		JSONArray a = new JSONArray();
+		if( mWordLookupResults != null ){
+			try{
+				for(int i=0; i<mWordLookupResults.size(); i++){
+					WordLookupResult r = mWordLookupResults.get(i);
+					JSONObject j  = new JSONObject();
+					j.put("book", r.book);
+					a.put(j);
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		String t = a.toString();
+		writeFileSdcardFile("/mnt/sdcard/adict/dictionaries.json", t);
+		return t;
+	}
+	public String getDictCss(String dictName, int dictIndex){
+		if( mWordLookupResults != null ){
+			WordLookupResult r = mWordLookupResults.get(dictIndex);
+			writeFileSdcardFile("/mnt/sdcard/adict/"+r.book+".css", r.css);
+			return r.css;
+		}
+		return "";
+	}
+	public String getDictHtml(String dictName, int dictIndex){
+		if( mWordLookupResults != null ){
+			WordLookupResult r = mWordLookupResults.get(dictIndex);
+			writeFileSdcardFile("/mnt/sdcard/adict/"+r.book+".html", r.html);
+			return r.html;
+		}
+		return "";
+	}
+	public String getDictJs(String dictName, int dictIndex){
+		if( mWordLookupResults != null ){
+			WordLookupResult r = mWordLookupResults.get(dictIndex);
+			writeFileSdcardFile("/mnt/sdcard/adict/"+r.book+".js", r.js);
+			return r.js;
+		}
+		return "";
+	}
+
+	
 	public String readFileSdcardFile(String fileName){   
 		String res="";   
 		try{   
@@ -523,7 +578,8 @@ public class XDictMainActivity extends SherlockActivity implements
 
 		@Override
 		protected String doInBackground(String... keywords) {
-			return mDictEng.lookupWord(keywords[0]);
+			mWordLookupResults = mDictEng.lookupWord(keywords[0]); 
+			return "";
 		}
 
 		@Override
@@ -558,7 +614,7 @@ public class XDictMainActivity extends SherlockActivity implements
 					setSearchInputText(word);
 				}
 			} else {
-				mSearchResult.loadUrl(buildUrl("help.html"));
+				//mSearchResult.loadUrl(buildUrl("help.html"));
 
 				InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 				inputMethodManager.hideSoftInputFromWindow(
@@ -579,10 +635,7 @@ public class XDictMainActivity extends SherlockActivity implements
 	private void showWordSearchResult(String htmlContent) {
 		// TODO Auto-generated method stub
 		mIndexHtmlContent = htmlContent;
-		mSearchResult.loadUrl(buildUrl("index.html"));
-//		mSearchResult.loadUrl("http://127.0.0.1:8080/index.html");
-//		mSearchResult.loadDataWithBaseURL("file:///mnt/sdcard/voa/dict/html/", htmlContent,
-//				"text/html", "utf-8", null);
+		mSearchResult.loadUrl("file:///android_asset/index.html");
 		mSearchResult.scrollTo(0, 0);
 
 		InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
@@ -592,11 +645,11 @@ public class XDictMainActivity extends SherlockActivity implements
 	}
 
 	// 写数据到SD中的文件
-	public void writeFileSdcardFile(String write_str) {
+	public void writeFileSdcardFile(String file, String text) {
 		try {
 
-			FileOutputStream fout = new FileOutputStream("/mnt/sdcard/log.html");
-			byte[] bytes = write_str.getBytes();
+			FileOutputStream fout = new FileOutputStream(file);
+			byte[] bytes = text.getBytes();
 
 			fout.write(bytes);
 			fout.close();

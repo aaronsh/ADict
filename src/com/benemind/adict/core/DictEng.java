@@ -88,16 +88,12 @@ public class DictEng {
 			}
 
 			
-			File onlineDictFolder = new File(mBookFolder, "qq_online");
-			if(!onlineDictFolder.exists()){
-				onlineDictFolder.mkdirs();
-			}
-			onlineDictFolder = new File(mBookFolder, "youdao_online");
+			File onlineDictFolder = new File(mBookFolder, "youdao_online");
 			if(!onlineDictFolder.exists()){
 				onlineDictFolder.mkdirs();
 			}
 			
-			String[] files = {"html.csv","iciba.csv", "dict.js",
+			String[] files = {"html.csv","iciba.csv", /*"dict.js",
 							"img/background.png",
 							"img/close.png",
 							"img/dot_brown.png",
@@ -115,7 +111,7 @@ public class DictEng {
 							"books/qq_online/qq_online.adict",
 							"books/qq_online/qq_online.ifo",
 							"books/qq_online/qq_online.js",
-							"books/youdao_online/youdao_online.adict",
+							"books/youdao_online/youdao_online.adict", */
 							"books/youdao_online/youdao_online.ifo",
 							"books/youdao_online/youdao_online.js"
 					};
@@ -229,30 +225,29 @@ public class DictEng {
 		return list;
 	}
 
-	public String lookupWord(String key) {
+	public ArrayList<WordLookupResult> lookupWord(String key) {
 		key = key.trim();
 		StringBuilder body = new StringBuilder();
+		
+		ArrayList<WordLookupResult> results = new ArrayList<WordLookupResult>();
+		
 		
 		ArrayList<String> CssLinks = new ArrayList<String>();
 		Iterator<Dictionary> it = mActiveDicts.iterator();
 		while (it.hasNext()) {
+			WordLookupResult r = new WordLookupResult();
 			Dictionary dict = it.next();
 			String text = dict.lookupWord(key);
 			if (text.length() > 0) {
-				String cssLink = dict.getCssLink();
-				if( cssLink != null ){
-					CssLinks.add(cssLink);
-				}
-				String jsText = dict.getJavascript();
-				body.append(DictHtmlBuilder.buildDictionary(text, getDictId(dict), jsText));
+				r.css = dict.getCss();
+				r.js = dict.getJavascript();
+				r.html = text;
+				r.book = dict.getDictPath();
+				results.add(r);
 			}
 		}
-		StringBuilder header = DictHtmlBuilder.buildHeader(CssLinks);
-		header.append(DictHtmlBuilder.buildBody(body.toString()));
-		StringBuilder html = DictHtmlBuilder.buildHtml(header.toString());
-		String htmlText = html.toString();
-		writeHtmlFile(htmlText);
-		return htmlText;
+
+		return results;
 	}
 
 	public ArrayList<Dictionary> listDicts() {
@@ -452,6 +447,22 @@ public class DictEng {
 		String res = "";
 		try {
 			FileInputStream fin = mCntx.openFileInput("dicts.json");
+			int length = fin.available();
+			byte[] buffer = new byte[length];
+			fin.read(buffer);
+			res = new String(buffer);
+			fin.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return res;
+
+	}
+	
+	private String loadSdcardFile(String file) {
+		String res = "";
+		try {
+			FileInputStream fin = new FileInputStream(file);
 			int length = fin.available();
 			byte[] buffer = new byte[length];
 			fin.read(buffer);

@@ -14,7 +14,7 @@ user this link to view reports:
 */
 
 @ReportsCrashes(formKey = "teswt", // will not be used
-formUri = "http://acrahost.duapp.com?do=submit",
+formUri = "http://www.benemind.com/acra/?do=submit",
 formUriBasicAuthLogin = "yourlogin", // optional&
 formUriBasicAuthPassword = "y0uRpa$$w0rd", // optional
 includeDropBoxSystemTags = true,

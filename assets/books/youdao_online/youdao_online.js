@@ -89,16 +89,20 @@
         }
         return html;
     }
+    
 	if(DictDiv.toString() == '[object HTMLDivElement]'){
         var wordDiv = DictDiv.getElementsByTagName('word')[0];
     	var word = wordDiv.innerHTML;
     	var contentsDiv = wordDiv.parentElement;
-    	this.container = contentsDiv;
     	
-    	queryOnlineDict('http://fanyi.youdao.com/openapi.do?keyfrom=N3verL4nd&key=208118276&type=data&doctype=json&version=1.1&q='+encodeURIComponent(word), getJsonpCallback(this));    	
+    	queryOnlineDict('http://fanyi.youdao.com/openapi.do?keyfrom=N3verL4nd&key=208118276&type=data&doctype=json&version=1.1&q='+encodeURIComponent(word), getJsonpCallback(DictDiv));    	
 	}
 	else{
-		onQueryFinish(DictDiv.status.http_code, DictDiv.contents, this.container);
+		var div = arguments[1];
+		var wordDiv = div.getElementsByTagName('word')[0];
+    	var contentsDiv = wordDiv.parentElement;
+    	
+		onQueryFinish(DictDiv.status.http_code, DictDiv.contents, contentsDiv);
 	}
 	return;
 }

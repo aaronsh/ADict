@@ -184,22 +184,84 @@ function queryOnlineDict(dictUrl, jsonpCallback){
     document.getElementsByTagName("head")[0].appendChild(JSONP);  
 }
 
-function getJsonpCallback(publishDictObj){
-	for(var i=0; i<PlugIns.length; i++){
-		if( PlugIns[i] == publishDictObj ){
-			return 'PlugIns['+i+'].func';
+var Dictionaries = null;
+function getJsonpCallback(DictDiv){
+	var id = DictDiv.getAttribute("id");            
+	for(var i=0; i<Dictionaries.length; i++){
+		if( Dictionaries[i].id == id ){
+			return 'Dictionaries['+i+'].jsonp';
 		}
 	}
 	return null;
 }
 
-function handlePlugins() {
-	console.log("handlePlugins 1");
-	for(var i=0; i<PlugIns.length; i++){
-		var dictHandler = PlugIns[i];
-		var e = document.getElementById(dictHandler.name);
-		dictHandler.func(e);
-	}
-}
 
-window.onload = handlePlugins;
+    function loadContents(){
+        if (window.adict == undefined) {
+            window.adict = new Object();
+            window.adict.getAjax = function (url) {
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.open("GET", "mock/"+url, false);
+                xmlhttp.send();
+                return xmlhttp.responseText;
+            }
+            window.adict.getDictionaries = function () {
+                var text = window.adict.getAjax("dictionaries.js");
+                return text;
+            }
+            window.adict.getDictCss = function (dictName, dictIndex) {
+                var text = window.adict.getAjax(dictName+".css");
+                return text;
+            }
+            window.adict.getDictHtml = function (dictName, dictIndex) {
+                var text = window.adict.getAjax(dictName+".html");
+                return text;
+            }
+            window.adict.getDictJs = function (dictName, dictIndex) {
+                var text = window.adict.getAjax(dictName+".js");
+                return text;
+            }
+        }
+
+        var text = window.adict.getDictionaries();
+        Dictionaries = eval(text);
+        for(var i=0; i<Dictionaries.length; i++){
+            var cssText = window.adict.getDictCss(Dictionaries[i].book, i);
+            if( cssText.length > 0 ){
+                var msg = document.createComment(Dictionaries[i].book+".css");
+                document.head.appendChild(msg);
+
+                var css = document.createElement('style');
+                css.innerText = cssText;
+
+                document.head.appendChild(css);
+            }
+
+            var htmlText = window.adict.getDictHtml(Dictionaries[i].book, i);
+            var htmlNode = document.createElement("div");
+            var id = "publishDict" + i;
+            htmlNode.setAttribute("id", id);
+            htmlNode.innerHTML = htmlText;
+            document.body.appendChild(htmlNode);
+            
+            Dictionaries[i].id = id;
+            Dictionaries[i].div = htmlNode;
+            
+            var jsonp = undefined;
+            var jsonp_func = "jsonp = function(data){console.log(data); var div = Dictionaries["+i+"].div;  Dictionaries["+i+"].func(data, div);}";
+            eval(jsonp_func);
+            Dictionaries[i].jsonp = jsonp;
+
+            var jsText = window.adict.getDictJs(Dictionaries[i].book, i);
+            var func = null;
+            try{
+                eval("func = " + jsText);
+                Dictionaries[i].func = func;
+                func(htmlNode);
+            }catch(ex){
+            	console.log(Dictionaries[i].book);
+                console.log(ex);
+            }
+        }
+    }
+    window.onload = loadContents;
