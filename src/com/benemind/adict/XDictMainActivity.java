@@ -197,7 +197,7 @@ public class XDictMainActivity extends SherlockActivity implements
 		SubMenu subMenu2 = menu.addSubMenu(R.string.menu_more);
 		subMenu2.add(1, MENU_ID_WEBSITE, Menu.NONE, R.string.menu_website);
 		subMenu2.add(1, MENU_ID_HELP, Menu.NONE, R.string.menu_help);
-//		subMenu2.add(1, MENU_ID_APP_STORE, Menu.NONE, R.string.menu_app_store);
+		subMenu2.add(1, MENU_ID_APP_STORE, Menu.NONE, R.string.menu_app_store);
 //		subMenu2.add(1, MENU_ID_APP_SHARE, Menu.NONE, R.string.menu_share);
 		subMenu2.add(1, MENU_ID_ABOUT, Menu.NONE, R.string.menu_about);
 
@@ -223,7 +223,7 @@ public class XDictMainActivity extends SherlockActivity implements
 			openHelp();
 			break;
 		case MENU_ID_APP_STORE:
-			
+			gotoStore();
 			break;
 		case MENU_ID_ABOUT:
 			new AboutDialog(this).show();
@@ -249,7 +249,7 @@ public class XDictMainActivity extends SherlockActivity implements
 	private void gotoStore(){
 		try{
 			startActivity(new Intent("android.intent.action.VIEW",
-					Uri.parse("market://details?id=com.benemind.voa")));
+					Uri.parse("market://details?id=com.benemind.adict")));
 		}
 		catch(ActivityNotFoundException e){
 			e.printStackTrace();
