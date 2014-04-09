@@ -1,38 +1,12 @@
 package com.benemind.adict;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EncodingUtils;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,7 +16,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -74,20 +48,12 @@ import com.actionbarsherlock.view.SubMenu;
 import com.benemind.adict.R;
 import com.benemind.util.AboutDialog;
 import com.benemind.util.DialogUtils;
-import com.benemind.util.FileUtils;
-import com.benemind.adict.core.DictConsts;
 import com.benemind.adict.core.DictEng;
-import com.benemind.adict.core.NotFoundDictException;
 import com.benemind.adict.core.WordLookupResult;
-import com.benemind.httpd.HttpTempFile;
-import com.benemind.httpd.TinyHttpRequestHandler;
-import com.benemind.httpd.TinyHttpResponse;
-import com.benemind.httpd.TinyHttpServer;
-//import com.benemind.httpd.HttpServer;
 
 public class XDictMainActivity extends SherlockActivity implements
 		OnItemClickListener, TextWatcher, OnClickListener,
-		OnEditorActionListener, TinyHttpRequestHandler {
+		OnEditorActionListener {
 	private static final String TAG = "MainActivity";
 	protected static final int MSG_LIST_WORDS = 0;
 	protected static final int MSG_REDIRECT_WORD = 1;
@@ -107,8 +73,6 @@ public class XDictMainActivity extends SherlockActivity implements
 		LIST_WORDS, SEARCH_WORD
 	}
 	
-	TinyHttpServer mHttpServer = null;
-	int mServerPort = 0;
 
 	AutoCompleteTextView mSearchInput;
 	WebView mSearchResult;
@@ -258,7 +222,7 @@ public class XDictMainActivity extends SherlockActivity implements
 	}
 	private void openHelp() {
 		// TODO Auto-generated method stub
-		mSearchResult.loadUrl("file:///android_asset/website/help_zh-CN.html");
+		mSearchResult.loadUrl("file:///android_asset/website/help.html");
 		//loadUrl(buildUrl("help.html"));
 		InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 		inputMethodManager.hideSoftInputFromWindow(
@@ -282,23 +246,7 @@ public class XDictMainActivity extends SherlockActivity implements
 		super.onCreate(savedInstanceState);
 		Log.v(TAG, "onCreate");
 		mWordLookupResults = null;
-		
-		mHttpServer = new TinyHttpServer(8083);
-		mHttpServer.addRequestHandler(this);
-		File RootFolder = FileUtils.getDictDir();
-		File HtmlFolder = RootFolder;
-		mHttpServer.setServerRoot(HtmlFolder);
-		mHttpServer.startServer();
-		while(mHttpServer.isStartingUp()){
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		mServerPort = mHttpServer.getServerPort();
-		
+			
 		setContentView(R.layout.xdict_main);
 
 		mSearchInput = (AutoCompleteTextView) findViewById(R.id.word_for_search);
@@ -338,6 +286,21 @@ public class XDictMainActivity extends SherlockActivity implements
 		loadDicts();
 		mIndexHtmlContent = "";
 
+	}
+	
+	//idStr = "setting_document_title"
+	public String loadResourceString(String idStr){
+		Resources res = getResources();
+		try{
+			String pkg = this.getPackageName();
+			int id = res.getIdentifier(idStr, "string", pkg);
+			String s = res.getString(id);
+			return s;
+		}
+		catch(android.content.res.Resources.NotFoundException e){
+			e.printStackTrace();
+		}
+		return "";
 	}
 	public String getDictionaries(){
 		JSONArray a = new JSONArray();
@@ -418,8 +381,6 @@ public class XDictMainActivity extends SherlockActivity implements
 					intent.putExtra("word", (String) null);
 					setSearchInputText(word);
 				}
-			}else{
-				mSearchResult.loadUrl(buildUrl("help.html"));
 			}
 		} else {
 			loadDictsTask loadTask = new loadDictsTask();
@@ -445,7 +406,6 @@ public class XDictMainActivity extends SherlockActivity implements
 	
 	protected void onDestroy(){
 		Log.v(TAG, "onDestroy");
-		mHttpServer.stopServer();
 		super.onDestroy();
 	}
 
@@ -706,53 +666,5 @@ public class XDictMainActivity extends SherlockActivity implements
 
 		}
 		return res;
-	}
-	
-	@Override
-	public TinyHttpResponse serve(String uri, String method, Properties header,
-			Properties _GET, Properties _POST,
-			Hashtable<String, HttpTempFile> _FILES) {
-		// TODO Auto-generated method stub
-		if( uri.equals("/index.html") ){
-			return new TinyHttpResponse(TinyHttpServer.HTTP_OK, "text/html", mIndexHtmlContent);
-		}
-		
-		if( uri.equals("/welcome.html") ){
-			String s = readAssetFile("welcome.html");
-			return new TinyHttpResponse(TinyHttpServer.HTTP_OK, "text/html", s);
-		}
-		if( uri.startsWith("/help") ){
-			String s= readAssetFile(uri.substring(1));
-			return new TinyHttpResponse(TinyHttpServer.HTTP_OK, "text/html", s);
-		}
-
-		return null;
-	}
-
-	@Override
-	public boolean ready(String uri, String method, Properties header,
-			Properties _GET, Properties _POST,
-			Hashtable<String, HttpTempFile> _FILES) {
-		// TODO Auto-generated method stub
-		Log.v(TAG, "uri:"+uri);
-		if( uri.equals("/index.html") ){
-			return true;
-		}
-		if( uri.equals("/welcome.html") ){
-			return true;
-		}
-		
-		if( uri.startsWith("/help") ){
-			return true;
-		}
-		return false;
-	}
-	
-	private String buildUrl(String path){
-		StringBuilder b = new StringBuilder("http://localhost:");
-		b.append(mServerPort);
-		b.append("/");
-		b.append(path);
-		return b.toString();
 	}
 }

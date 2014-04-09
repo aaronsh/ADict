@@ -33,4 +33,121 @@
     <string name="share_content">《ADict》这款安卓软件非常棒。希望你也喜欢！</string>
     <string name="market_no_app_msg">无法打开应用市场！</string>
     <string name="market_no_app_ok">确定</string>
+    <string name="readme"><Data>
+<![CDATA[  
+    <header>
+      <div class="inner">
+        <h1>Adict</h1>
+        <h2>一款免费的高性能电子词典</h2>
+        <a href="https://github.com/aaronsh/ADict" class="button"><small>项目网站</small></a>
+      </div>
+    </header>
+   
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h3>
+<a name="welcome-to-adict-pages" class="anchor" href="#welcome-to-adict-pages"><span class="octicon octicon-link"></span></a>
+应用特点
+          </h3>
+          <ul>
+            <li>
+支持在线查询，支持离线词库(StarDict格式，有牛津现代英汉双解词典、朗道英汉字典等多款词典可以选择，可提供详尽字词解释、词性、例句等)，比起翻字典方便得多；
+            </li>
+            <li>
+词条解释页面简洁美观，操作便利；
+            </li>
+            <li>
+修正大部分词库中音标显示问题；完美音标呈现；
+            </li>
+            <li>
+极速查询；支持无限量词库；
+            </li>
+            <li>
+纯Java编写，支持多种CPU，再无硬件设备限制；
+            </li>
+            <li>
+支持javascript扩展，支持深度定制；用户可以定制词库，定制在线查询，定制查询结果显示，一切都可以定制。
+            </li>
+          </ul>
+          <h3>
+<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>
+项目缘由
+          </h3>
+            <p>
+我在开发《逆向巧学VOA》软件的时候，我希望能够找到一款能够方便用户对单词进行详细查询的电子词典。在先后试过多款电子词典后，我最终却失望的发现这些均不能满足我的要求。
+            </p>
+            <p>
+有的要求用户先在词典中进行设置；有的只能弹出一个简单翻译窗口，而且关闭按钮小小的，对用户来说很难关闭；有的则是音标显示错误，即使所谓的音标完美版；有的则是离线功能少的可怜！
+            </p><p>
+如果能有一款真正好用而且可以定制的电子词典多好！
+            </p><p>
+基于此，我决定自己开发一款电子词典应用。这款软件应该具有如下特点：免费、开源、采用常见离线词库、单词查询速度理想、可扩展性好。在经过一段时间的开发和测试后，ADict, -A dictionary on Android, 就与大家见面了。希望诸位喜欢这款软件并且参与这个开源项目的开发！
+            </p>
+          <h3>
+<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>
+问题及建议
+          </h3>
+            <p>
+在应用使用过程中的任何问题和建议请通过Email发给我，我很期待您的反馈。
+            </p>
+          <h3>
+<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>
+联系方式
+          </h3>
+            <p><a href="mailto:rib.liu@qq.com">rib.liu@qq.com</a></p>
+        </section>
+      </div>
+    </div>
+]]></Data></string>
+    <string name="help"><Data>
+<![CDATA[
+    <header>
+      <div class="inner">
+        <h1>Adict</h1>
+        <h2>The implementation of StarDict on Android in pure java with excellent performance, enjoyable UI and high scalability</h2>
+        <a href="https://github.com/aaronsh/ADict" class="button"><small>View website</small></a>
+      </div>
+    </header>
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+		<section id="main-content">
+          <h3>
+<a name="welcome-to-adict-pages" class="anchor" href="#welcome-to-adict-pages"><span class="octicon octicon-link"></span></a>
+基本功能
+          </h3>
+          <ol>
+			<li>字典安装</li>
+			<p>将StartDict字典文件解压到手机SD卡中的/adict/books文件夹中,然后重启ADict即可。</p>
+			<p>通常将StartDict字典文件解压后会得到与字典名称对应的文件夹，而且文件夹中有扩展名为ifo、idx、dict或dict.gz的文件。</p>
+			<p>词典安装完毕后，SD卡中的文件结构如下图：</p>
+			<p><img src="images/add_dict_4.jpg" class="screenshot" ></img></p>
+			<li>单词查询</li>
+			<p>在单词查询框中输入要查询的单词，然后点击“查询”按钮或点击下拉单词列表中的单词项即可。在当前的查询结果中，用户也可以点击词典右侧的“<img src="images/expand.png"></img>”或词条左侧的“<img src="images/line_blue.png"></img>”实现对词典或词条的隐藏。</p>
+			<p><img src="images/screenshot_1_12.jpg" class="screenshot"></img></p>
+          </ol>
+          <h3>
+<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>
+高级功能
+          </h3>
+          <ol>
+          	<li>激活/禁用词典</li>
+          	<p>打开ADict，点击右上角的字典管理图标进入字典管理页面。在字典管理页面下，点击字典右侧的选择框即可激活/禁用选中的词典。</p>
+            <li>设置词典优先顺序</li>
+            <p>由于ADict查询结果是按照字典管理页面中的字典的顺序显示。所以，改变字典在管理页面列表中的顺序即可设置词典的优先顺序。在字典管理页面下，按住词典左侧的图标即可在词典列表中拖动所选中的词典到新的位置。</p>
+          </ol>
+          <h3>
+<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>
+进阶扩展
+          </h3>
+          <ol>
+            <li>样式自定义</li>
+            <p>ADict采用Html和Webview作为查询结果的显示，所以可以通过Javascript和Css对查询结果进行调整，渲染。这时，需要将Javascript文件或css文件保存在词典的对应目录，例如有道在线词典的例子。</p>
+            <li>功能扩展</li>
+            <p>请参考有道在线词典的实现。有道在线词典的全部实现文件都在ADict文件夹下的books/youdao_online目录下。</p>
+          </ol>
+        </section>        
+      </div>
+    </div>
+]]></Data></string>
 </resources>
