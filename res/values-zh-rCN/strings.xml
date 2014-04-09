@@ -102,13 +102,6 @@
 ]]></Data></string>
     <string name="help"><Data>
 <![CDATA[
-    <header>
-      <div class="inner">
-        <h1>Adict</h1>
-        <h2>The implementation of StarDict on Android in pure java with excellent performance, enjoyable UI and high scalability</h2>
-        <a href="https://github.com/aaronsh/ADict" class="button"><small>View website</small></a>
-      </div>
-    </header>
     <div id="content-wrapper">
       <div class="inner clearfix">
 		<section id="main-content">

@@ -163,7 +163,7 @@ public class XDictMainActivity extends SherlockActivity implements
 		subMenu2.add(1, MENU_ID_HELP, Menu.NONE, R.string.menu_help);
 		subMenu2.add(1, MENU_ID_APP_STORE, Menu.NONE, R.string.menu_app_store);
 //		subMenu2.add(1, MENU_ID_APP_SHARE, Menu.NONE, R.string.menu_share);
-		subMenu2.add(1, MENU_ID_ABOUT, Menu.NONE, R.string.menu_about);
+//		subMenu2.add(1, MENU_ID_ABOUT, Menu.NONE, R.string.menu_about);
 
 		MenuItem subMenu2Item = subMenu2.getItem();
 		subMenu2Item.setIcon(R.drawable.ic_menu_more);
