@@ -337,20 +337,15 @@ public class XDictMainActivity extends SherlockActivity implements
 		return t;
 	}
 	@JavascriptInterface
-	public String getDictCss(String dictName, int dictIndex){
-		if( mWordLookupResults != null ){
-			WordLookupResult r = mWordLookupResults.get(dictIndex);
-			//writeFileSdcardFile("/mnt/sdcard/adict/"+r.book+".css", r.css);
-			return r.css;
-		}
-		return "";
-	}
-	@JavascriptInterface
 	public String getDictHtml(String dictName, int dictIndex){
 		if( mWordLookupResults != null ){
 			WordLookupResult r = mWordLookupResults.get(dictIndex);
-			//writeFileSdcardFile("/mnt/sdcard/adict/"+r.book+".html", r.html);
-			return r.html;
+			StringBuilder b = new StringBuilder();
+			b.append("    <style type=\"text/css\">\n");
+			b.append(r.css);
+			b.append("\n    </style>\n");
+			b.append(r.html);
+			return b.toString();
 		}
 		return "";
 	}

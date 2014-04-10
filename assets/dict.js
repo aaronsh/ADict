@@ -201,16 +201,12 @@ function getJsonpCallback(DictDiv){
             window.adict = new Object();
             window.adict.getAjax = function (url) {
                 var xmlhttp = new XMLHttpRequest();
-                xmlhttp.open("GET", "mock/"+url, false);
+                xmlhttp.open("GET", "mock/get.php?f="+url, false);
                 xmlhttp.send();
                 return xmlhttp.responseText;
             }
             window.adict.getDictionaries = function () {
                 var text = window.adict.getAjax("dictionaries.js");
-                return text;
-            }
-            window.adict.getDictCss = function (dictName, dictIndex) {
-                var text = window.adict.getAjax(dictName+".css");
                 return text;
             }
             window.adict.getDictHtml = function (dictName, dictIndex) {
@@ -226,17 +222,6 @@ function getJsonpCallback(DictDiv){
         var text = window.adict.getDictionaries();
         Dictionaries = eval(text);
         for(var i=0; i<Dictionaries.length; i++){
-            var cssText = window.adict.getDictCss(Dictionaries[i].book, i);
-            if( cssText.length > 0 ){
-                var msg = document.createComment(Dictionaries[i].book+".css");
-                document.head.appendChild(msg);
-
-                var css = document.createElement('style');
-                css.innerText = cssText;
-
-                document.head.appendChild(css);
-            }
-
             var htmlText = window.adict.getDictHtml(Dictionaries[i].book, i);
             var htmlNode = document.createElement("div");
             var id = "publishDict" + i;
