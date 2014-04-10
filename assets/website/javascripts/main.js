@@ -12,6 +12,8 @@ function loadContents(resIdStr) {
             return text;
         }
     }
+    
+    for( var k in window.adict){console.log(k);}
 
     var text = window.adict.loadResourceString(resIdStr);
     var htmlNode = document.createElement("div");
