@@ -126,7 +126,8 @@ public class DefaultPlugIn {
 								break;
 							case CssFile:
 								if( text.length() > 0 ){
-									plugin.set(field, "plugins"+File.separator + text);
+									text = readCss(cntx, text);
+									plugin.set(field, text);
 								}
 								else{
 									plugin.set(field, null);
@@ -169,6 +170,12 @@ public class DefaultPlugIn {
 	
 	public static DefaultPlugIn findMatchPluagIn(String bookName, String wordCount, String indexFileSize) {
 		// TODO Auto-generated method stub
+		if( wordCount == null ){
+			wordCount = "-";
+		}
+		if( indexFileSize == null ){
+			indexFileSize = "-";
+		}
 		if( mPlugins != null ){
 			Iterator<DefaultPlugIn> it = mPlugins.iterator();
 			while(it.hasNext()){
@@ -183,8 +190,14 @@ public class DefaultPlugIn {
 	}
 	
 	private static String readJavascript(Context cntx, String jsName) {
+		return readAssets(cntx, jsName);
+	}
+	private static String readCss(Context cntx, String cssName) {
+		return readAssets(cntx, cssName);
+	}
+	private static String readAssets(Context cntx, String name) {
 		try{
-			InputStream in = cntx.getResources().getAssets().open("plugins/"+jsName); 
+			InputStream in = cntx.getResources().getAssets().open("plugins/"+name); 
 			int length = in.available();   
 
 			byte [] buffer = new byte[length];

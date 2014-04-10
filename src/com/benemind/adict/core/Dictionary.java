@@ -202,13 +202,21 @@ public class Dictionary {
 		
 		String ListWebApi = null;
 		String JavascriptText = "";
-		String CssText = null;
+		String CssText = "";
 		
 		String wordCount = FileInfo.getValue(IfoFile.KEY_wordcount);
 		String indexFileSize = FileInfo.getValue(IfoFile.KEY_idxfilesize);
 		//load css and js
 		file = new File(dir, dictName+".css");
-		CssText = readFromSd(file);
+		if( file.exists() ){
+			CssText = readFromSd(file);
+		}
+		else{
+			DefaultPlugIn plugin = DefaultPlugIn.findMatchPluagIn(BookName, wordCount, indexFileSize);
+			if( plugin != null ){
+				CssText = plugin.get(DefaultPlugIn.Field.CssFile);
+			}
+		}
 		file = new File(dir, dictName+".js");
 		if( file.exists() ){
 			JavascriptText = readFromSd(file);
