@@ -17,6 +17,7 @@ import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.net.MailTo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.ConsoleMessage;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -117,6 +119,17 @@ public class XDictMainActivity extends SherlockActivity implements
 				mHandler.sendMessage(msg);
 				return true;
 			}
+			if(url.startsWith("mailto:")){
+		        MailTo mt = MailTo.parse(url);
+		        Intent i = new Intent(Intent.ACTION_SEND);
+		        i.setType("text/plain");
+		        i.putExtra(Intent.EXTRA_EMAIL, new String[]{mt.getTo()});
+		        i.putExtra(Intent.EXTRA_SUBJECT, mt.getSubject());
+		        i.putExtra(Intent.EXTRA_CC, mt.getCc());
+		        i.putExtra(Intent.EXTRA_TEXT, mt.getBody());
+		        XDictMainActivity.this.startActivity(i);
+		        return true;
+		    }
 			return false;
 		}
 
@@ -288,6 +301,7 @@ public class XDictMainActivity extends SherlockActivity implements
 
 	}
 	
+	@JavascriptInterface
 	//idStr = "setting_document_title"
 	public String loadResourceString(String idStr){
 		Resources res = getResources();
@@ -302,6 +316,7 @@ public class XDictMainActivity extends SherlockActivity implements
 		}
 		return "";
 	}
+	@JavascriptInterface
 	public String getDictionaries(){
 		JSONArray a = new JSONArray();
 		if( mWordLookupResults != null ){
@@ -318,29 +333,32 @@ public class XDictMainActivity extends SherlockActivity implements
 			}
 		}
 		String t = a.toString();
-		writeFileSdcardFile("/mnt/sdcard/adict/dictionaries.json", t);
+		//writeFileSdcardFile("/mnt/sdcard/adict/dictionaries.json", t);
 		return t;
 	}
+	@JavascriptInterface
 	public String getDictCss(String dictName, int dictIndex){
 		if( mWordLookupResults != null ){
 			WordLookupResult r = mWordLookupResults.get(dictIndex);
-			writeFileSdcardFile("/mnt/sdcard/adict/"+r.book+".css", r.css);
+			//writeFileSdcardFile("/mnt/sdcard/adict/"+r.book+".css", r.css);
 			return r.css;
 		}
 		return "";
 	}
+	@JavascriptInterface
 	public String getDictHtml(String dictName, int dictIndex){
 		if( mWordLookupResults != null ){
 			WordLookupResult r = mWordLookupResults.get(dictIndex);
-			writeFileSdcardFile("/mnt/sdcard/adict/"+r.book+".html", r.html);
+			//writeFileSdcardFile("/mnt/sdcard/adict/"+r.book+".html", r.html);
 			return r.html;
 		}
 		return "";
 	}
+	@JavascriptInterface
 	public String getDictJs(String dictName, int dictIndex){
 		if( mWordLookupResults != null ){
 			WordLookupResult r = mWordLookupResults.get(dictIndex);
-			writeFileSdcardFile("/mnt/sdcard/adict/"+r.book+".js", r.js);
+			//writeFileSdcardFile("/mnt/sdcard/adict/"+r.book+".js", r.js);
 			return r.js;
 		}
 		return "";
