@@ -1,6 +1,8 @@
 ﻿
-function publishDict(DictDiv) {
-/*  langdao-ec-gb.js    */    
+function publishDict(event, dict, data) {
+/*  langdao-ec-gb.js    */
+    if( event == 'ready' ){
+        var DictDiv = data;
     var phoneticHandler = function(phonetic){
         phonetic = phonetic.replace(/\*\[([^\]]+)\]/, '$1');        
         var arr = phonetic.split(',');
@@ -50,5 +52,6 @@ function publishDict(DictDiv) {
 	    words[i].innerHTML = html;
 	    words[i].setAttribute('style','padding:2px 4px  2px 4px;');
 	}
-	return;
+    }
+    return;
 }
