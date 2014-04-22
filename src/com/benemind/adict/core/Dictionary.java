@@ -215,6 +215,9 @@ public class Dictionary {
 			DefaultPlugIn plugin = DefaultPlugIn.findMatchPluagIn(BookName, wordCount, indexFileSize);
 			if( plugin != null ){
 				CssText = plugin.get(DefaultPlugIn.Field.CssFile);
+				if( CssText == null ){
+					CssText = "";
+				}
 			}
 		}
 		file = new File(dir, dictName+".js");
@@ -226,6 +229,9 @@ public class Dictionary {
 			DefaultPlugIn plugin = DefaultPlugIn.findMatchPluagIn(BookName, wordCount, indexFileSize);
 			if( plugin != null ){
 				JavascriptText = plugin.get(DefaultPlugIn.Field.JavaScript);
+				if( JavascriptText == null ){
+					JavascriptText = "";
+				}
 			}
 		}
 		
