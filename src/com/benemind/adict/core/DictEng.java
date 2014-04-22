@@ -232,7 +232,6 @@ public class DictEng {
 		ArrayList<WordLookupResult> results = new ArrayList<WordLookupResult>();
 		
 		
-		ArrayList<String> CssLinks = new ArrayList<String>();
 		Iterator<Dictionary> it = mActiveDicts.iterator();
 		while (it.hasNext()) {
 			WordLookupResult r = new WordLookupResult();

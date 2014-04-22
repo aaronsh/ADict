@@ -130,7 +130,7 @@ public class DefaultPlugIn {
 									plugin.set(field, text);
 								}
 								else{
-									plugin.set(field, null);
+									plugin.set(field, "");
 								}
 								break;
 							case BookName:
@@ -210,6 +210,6 @@ public class DefaultPlugIn {
 		catch(Exception e){   
 			e.printStackTrace();   
 		}   
-		return null;
+		return "";
 	}
 }
