@@ -341,9 +341,11 @@ public class XDictMainActivity extends SherlockActivity implements
 		if( mWordLookupResults != null ){
 			WordLookupResult r = mWordLookupResults.get(dictIndex);
 			StringBuilder b = new StringBuilder();
-			b.append("    <style type=\"text/css\">\n");
-			b.append(r.css.replaceFirst("/@Charset\\s+\"[^\"{]+\";/i", "replaced"));
-			b.append("\n    </style>\n");
+			if( r.css != null ){
+				b.append("    <style type=\"text/css\">\n");
+				b.append(r.css.replaceFirst("/@Charset\\s+\"[^\"{]+\";/i", "replaced"));
+				b.append("\n    </style>\n");
+			}
 			b.append(r.html);
 			return b.toString();
 		}
